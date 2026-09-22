@@ -55,23 +55,52 @@ function randomiseFinalEight(){const names=allSeats().filter(x=>x.player).map(x=
 function addPlayer(){
  const input=document.getElementById('nameInput'),name=input.value.trim();
  if(!name)return;
- if(Object.keys(state.players).some(k=>k.toLowerCase()===name.toLowerCase()))return toast('That player is already seated.');
+ const canonical=name.toLowerCase()==='paul w'?'Paul W':name;
+ if(Object.keys(state.players).some(k=>k.toLowerCase()===canonical.toLowerCase()))return toast('That player is already seated.');
  const before=Object.keys(state.players).length;
- if(before<=8&&state.tables.length>1){collapseToFinalTable();if(before===8)randomiseFinalEight()}
- state.players[name.toLowerCase()==='paul w'?'Paul W':name]=true;
+ if(before<=8&&state.tables.length>1){collapseToFinalTable();}
+ state.players[canonical]=true;
  const total=Object.keys(state.players).length;
  const needed=Math.max(1,Math.ceil(total/MAX_SEATS));
  let opened=false;
  while(state.tables.length<needed){state.tables.push(makeTable(state.tables.length+1));opened=true}
- if(total===8){randomiseFinalEight()}
- else if(opened){rebalance();toast('All seats were full — Table '+state.tables.length+' opened automatically.')}
- else {placeRandomly(name.toLowerCase()==='paul w'?'Paul W':name);ensurePaul()}
+ if(total===8){
+   randomiseFinalEight();
+ }else if(opened){
+   rebalance();
+   toast('Table '+state.tables.length+' opened automatically — players balanced.');
+ }else{
+   placeRandomly(canonical);
+   ensurePaul();
+ }
  input.value='';
- saveAndRender()
+ saveAndRender();
 }
+
 function addTable(){const total=Object.keys(state.players).length;if(total<=8)return toast('Up to 8 players use one final table. Table 2 opens automatically for player 9.');state.tables.push(makeTable(state.tables.length+1));rebalance();saveAndRender('Tables rebalanced.')}
 function removeTable(){if(state.tables.length<=1)return toast('You must keep at least one table.');const total=Object.keys(state.players).length;if(total>(state.tables.length-1)*MAX_SEATS)return toast('Cannot remove this table — there are not enough seats.');const names=Object.keys(state.players);state.tables.pop();state.tables.forEach((t,i)=>{t.number=i+1;t.seats=Array(MAX_SEATS).fill(null)});if(names.length<=8){randomiseFinalEight()}else{rebalance()}saveAndRender('Table removed and players rebalanced.')}
-function rebalance(){const names=Object.keys(state.players).filter(n=>n!=='Paul W');state.tables.forEach(t=>t.seats=Array(MAX_SEATS).fill(null));const t1=state.tables[0];if(state.players['Paul W'])t1.seats[2]='Paul W';for(let i=names.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[names[i],names[j]]=[names[j],names[i]]}names.forEach(placeRandomly)}
+function rebalance(){
+ const names=Object.keys(state.players).filter(n=>n!=='Paul W');
+ state.tables.forEach(t=>t.seats=Array(MAX_SEATS).fill(null));
+ const total=names.length+(state.players['Paul W']?1:0);
+ const tableCount=state.tables.length;
+ const base=Math.floor(total/tableCount);
+ const extra=total%tableCount;
+ const targets=state.tables.map((t,i)=>base+(i<extra?1:0));
+ if(state.players['Paul W']){
+   state.tables[0].seats[2]='Paul W';
+ }
+ for(let i=names.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[names[i],names[j]]=[names[j],names[i]]}
+ let index=0;
+ for(let ti=0;ti<state.tables.length;ti++){
+   const t=state.tables[ti];
+   const target=targets[ti];
+   let occupied=t.seats.filter(Boolean).length;
+   for(let si=0;si<t.seats.length && occupied<target;si++){
+     if(!t.seats[si]){t.seats[si]=names[index++];occupied++;}
+   }
+ }
+}
 
 function normalizeTables(){
  const total=Object.keys(state.players).length;
@@ -88,9 +117,21 @@ function normalizeTables(){
    }
    return false;
  }
- if(state.tables.length<needed){while(state.tables.length<needed)state.tables.push(makeTable(state.tables.length+1));rebalance();return true}
- if(state.tables.length>needed){state.tables=state.tables.slice(0,needed);state.tables.forEach((t,i)=>{t.number=i+1;t.seats=Array(MAX_SEATS).fill(null)});rebalance();return true}
- return false;
+ let changed=false;
+ while(state.tables.length<needed){state.tables.push(makeTable(state.tables.length+1));changed=true}
+ if(state.tables.length>needed){
+   state.tables=state.tables.slice(0,needed);
+   state.tables.forEach((t,i)=>{t.number=i+1;t.seats=Array(MAX_SEATS).fill(null)});
+   changed=true;
+ }
+ state.tables.forEach((t,i)=>t.number=i+1);
+ const counts=state.tables.map(t=>t.seats.filter(Boolean).length);
+ const balanced=counts.every(c=>c===Math.floor(total/state.tables.length)||c===Math.ceil(total/state.tables.length));
+ const seatedNames=allSeats().filter(x=>x.player).map(x=>x.player).sort();
+ const stateNames=Object.keys(state.players).sort();
+ const samePlayers=seatedNames.length===stateNames.length&&seatedNames.every((n,i)=>n===stateNames[i]);
+ if(changed||!balanced||!samePlayers){rebalance();changed=true}
+ return changed;
 }
 
 function ordinal(n){if(n%100>=11&&n%100<=13)return n+'th';return n+({1:'st',2:'nd',3:'rd'}[n%10]||'th')}
