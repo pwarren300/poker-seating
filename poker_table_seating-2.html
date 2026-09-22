@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poker Table Seating</title>
+<style>
+  :root { --bg:#111827; --panel:#1f2937; --panel2:#273449; --text:#f9fafb; --muted:#9ca3af; --accent:#22c55e; --danger:#ef4444; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,sans-serif; background:linear-gradient(135deg,#0b1220,#172033); color:var(--text); min-height:100vh; }
+  .wrap { max-width:1100px; margin:auto; padding:20px; }
+  h1 { margin:0 0 6px; font-size:clamp(25px,5vw,38px); }
+  .sub { color:var(--muted); margin:0 0 18px; }
+  .toolbar { display:flex; gap:10px; flex-wrap:wrap; background:var(--panel); padding:14px; border-radius:14px; margin-bottom:16px; }
+  input, button { font:inherit; }
+  input { flex:1; min-width:180px; padding:12px 13px; border-radius:10px; border:1px solid #46546a; background:#111827; color:white; outline:none; }
+  input:focus { border-color:var(--accent); }
+  button { border:0; border-radius:10px; padding:11px 14px; cursor:pointer; font-weight:700; color:#07110a; background:var(--accent); }
+  button.secondary { background:#475569; color:white; }
+  button.danger { background:var(--danger); color:white; }
+  button:disabled { opacity:.45; cursor:not-allowed; }
+  .status { background:#172033; border:1px solid #334155; padding:12px 14px; border-radius:12px; margin-bottom:16px; color:#dbeafe; }
+  .tables { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
+  .table-card { background:var(--panel); border-radius:18px; padding:15px; box-shadow:0 8px 30px #0004; }
+  .table-head { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; }
+  .table-title { font-size:20px; font-weight:800; }
+  .count { color:var(--muted); font-size:13px; }
+  .remove { padding:7px 10px; font-size:12px; }
+  .seats { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+  .seat { min-height:62px; background:var(--panel2); border:1px solid #3b4a60; border-radius:11px; padding:8px; display:flex; flex-direction:column; justify-content:center; }
+  .seat.fixed { border-color:#f59e0b; background:#3b2f18; }
+  .seat-num { color:var(--muted); font-size:11px; text-transform:uppercase; }
+  .player { font-weight:750; overflow-wrap:anywhere; }
+  .empty { color:#64748b; font-size:14px; }
+  .hint { margin-top:12px; color:var(--muted); font-size:12px; line-height:1.45; }
+  .players { margin-top:18px; background:var(--panel); border-radius:14px; padding:14px; }
+  .players h2 { margin:0 0 8px; font-size:18px; }
+  .player-list { display:flex; flex-wrap:wrap; gap:7px; }
+  .pill { background:#334155; padding:7px 9px; border-radius:999px; font-size:13px; }
+  .empty-state { color:var(--muted); padding:30px; text-align:center; }
+  .toast { position:fixed; left:50%; bottom:18px; transform:translateX(-50%); background:#020617; border:1px solid #475569; padding:11px 15px; border-radius:10px; display:none; z-index:10; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>♠ Poker Table Seating</h1>
+  <p class="sub">Up to 8 players per table • Paul W is permanently fixed at Table 1, Seat 3</p>
+
+  <div class="toolbar">
+    <label style="display:flex;align-items:center;gap:8px;color:#cbd5e1;font-size:13px;">
+      Tournament date
+      <input id="tournamentDate" type="date" style="min-width:150px;flex:0 0 auto;">
+    </label>
+    <input id="nameInput" placeholder="Enter player name…" autocomplete="off">
+    <button onclick="addPlayer()">Add Player</button>
+    <button class="secondary" onclick="addTable()">+ Add Table</button>
+    <button class="danger" onclick="removeTable()">− Remove Table</button>
+    <button onclick="endTournament()">🏆 End Tournament</button>
+  </div>
+
+  <div id="status" class="status"></div>
+  <div id="tables" class="tables"></div>
+
+  <div class="players">
+    <h2>Finishing positions</h2>
+    <div id="finishList" class="player-list"></div>
+    <div class="hint">Click Finish when a player is knocked out. The app records their exact finishing position.</div>
+  </div>
+
+  <div class="players">
+    <h2>Tournament history</h2>
+    <div id="historyList" class="player-list"></div>
+  </div>
+
+  <div class="players">
+    <h2>Players currently seated</h2>
+    <div id="playerList" class="player-list"></div>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const MAX_SEATS = 8;
+const FIXED = { table: 1, seat: 3, name: "Paul W" };
+let state = load();
+document.getElementById("tournamentDate").value = state.tournamentDate;
+
+function load() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("pokerSeatingV1"));
+    if (saved && Array.isArray(saved.tables)) {
+      saved.history = Array.isArray(saved.history) ? saved.history : [];
+      saved.finishOrder = Array.isArray(saved.finishOrder) ? saved.finishOrder : [];
+      saved.tournamentDate = saved.tournamentDate || new Date().toISOString().slice(0,10);
+      return saved;
+    }
+  } catch(e) {}
+  return { tables: [makeTable(1)], players: {}, tournamentDate: new Date().toISOString().slice(0,10), history: [], finishOrder: [] };
+}
+function save() {
+  localStorage.setItem("pokerSeatingV1", JSON.stringify(state));
+}
+function makeTable(num) {
+  return { number:num, seats:Array(MAX_SEATS).fill(null) };
+}
+function toast(msg) {
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.style.display="block";
+  clearTimeout(window.__toast); window.__toast=setTimeout(()=>el.style.display="none",2200);
+}
+function allSeats() {
+  const out=[];
+  state.tables.forEach(t=>t.seats.forEach((p,i)=>out.push({table:t.number,seat:i+1,player:p})));
+  return out;
+}
+function finalTableMode() {
+  return allSeats().filter(x=>x.player).length === 8;
+}
+function ensurePaul() {
+  if (finalTableMode()) return;
+  let paul = null;
+  state.tables.forEach(t=>t.seats.forEach((p,i)=>{
+    if (p && p.toLowerCase()==="paul w") paul={t,i};
+  }));
+  const t1=state.tables.find(t=>t.number===1);
+  if (!t1) return;
+  if (t1.seats[2] !== "Paul W") {
+    if (t1.seats[2]) {
+      const displaced=t1.seats[2];
+      t1.seats[2]=null;
+      placeRandomly(displaced);
+    }
+    if (paul) paul.t.seats[paul.i]=null;
+    t1.seats[2]="Paul W";
+  }
+}
+function placeRandomly(name) {
+  const free=[];
+  state.tables.forEach(t=>t.seats.forEach((p,i)=>{
+    if (!p && !(t.number===1 && i===2)) free.push({t,i});
+  }));
+  if (!free.length) return false;
+  const x=free[Math.floor(Math.random()*free.length)];
+  x.t.seats[x.i]=name;
+  return true;
+}
+function addPlayer() {
+  const input=document.getElementById("nameInput");
+  const name=input.value.trim();
+  if (!name) return;
+  if (name.toLowerCase()==="paul w") {
+    ensurePaul(); input.value=""; render(); toast(finalTableMode() ? "Final table: all 8 seats are random." : "Paul W is fixed at Table 1, Seat 3."); return;
+  }
+  if (Object.keys(state.players).some(k=>k.toLowerCase()===name.toLowerCase())) {
+    toast("That player is already seated."); return;
+  }
+  if (allSeats().filter(x=>x.player).length >= state.tables.length*MAX_SEATS-1) {
+    toast("All available seats are full."); return;
+  }
+  state.players[name]=true;
+  placeRandomly(name);
+  save(); input.value=""; render();
+}
+function addTable() {
+  const n=state.tables.length+1;
+  state.tables.push(makeTable(n));
+  rebalance();
+  save(); render();
+  toast("Tables rebalanced.");
+}
+function removeTable() {
+  if (state.tables.length<=1) { toast("You must keep at least one table."); return; }
+  const removed=state.tables.pop();
+  const displaced=removed.seats.filter(Boolean).filter(p=>p!=="Paul W");
+  // Clear references to removed table, then redistribute all players.
+  state.tables.forEach(t=>t.seats=Array(MAX_SEATS).fill(null));
+  ensurePaul();
+  displaced.forEach(placeRandomly);
+  // Players from remaining tables need to be restored too.
+  const names=Object.keys(state.players).filter(n=>n!=="Paul W");
+  // If state got wiped above, place everyone exactly once.
+  const currently=allSeats().filter(x=>x.player).map(x=>x.player);
+  names.filter(n=>!currently.includes(n)).forEach(placeRandomly);
+  // If some names were still on old seats before clearing, restore from state list.
+  if (allSeats().filter(x=>x.player).length === 8) randomiseFinalEight();
+  save(); render(); toast(allSeats().filter(x=>x.player).length === 8 ? "Final table randomised." : "Table removed and players rebalanced.");
+}
+function rebalance() {
+  const names=[];
+  state.tables.forEach(t=>t.seats.forEach(p=>{ if(p && p!=="Paul W") names.push(p); }));
+  // Clear and randomly distribute, while preserving Paul's fixed seat.
+  state.tables.forEach(t=>t.seats=Array(MAX_SEATS).fill(null));
+  const t1=state.tables.find(t=>t.number===1);
+  t1.seats[2]="Paul W";
+  // Shuffle player order, then distribute as evenly as possible.
+  for (let i=names.length-1;i>0;i--) {
+    const j=Math.floor(Math.random()*(i+1)); [names[i],names[j]]=[names[j],names[i]];
+  }
+  let idx=0;
+  while (idx<names.length) {
+    const counts=state.tables.map(t=>t.seats.filter(Boolean).length);
+    const min=Math.min(...counts);
+    const candidates=state.tables.filter((t,k)=>counts[k]===min);
+    const t=candidates[Math.floor(Math.random()*candidates.length)];
+    const free=t.seats.map((p,i)=>!p && !(t.number===1&&i===2)?i:-1).filter(i=>i>=0);
+    const seat=free[Math.floor(Math.random()*free.length)];
+    t.seats[seat]=names[idx++];
+  }
+}
+function randomiseFinalEight() {
+  const names = allSeats().filter(x=>x.player).map(x=>x.player);
+  if (names.length !== 8) return;
+  state.tables.forEach(t => t.seats = Array(MAX_SEATS).fill(null));
+  for (let i = names.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [names[i], names[j]] = [names[j], names[i]];
+  }
+  // With exactly 8 players, use the first table and randomise every seat,
+  // including Paul W. This is the one state where his fixed seat is suspended.
+  state.tables[0].seats = names.slice();
+  save();
+}
+function ordinal(n) {
+  if (n % 100 >= 11 && n % 100 <= 13) return n + "th";
+  return n + ({1:"st",2:"nd",3:"rd"}[n % 10] || "th");
+}
+
+function finishPlayer(name) {
+  if (!state.players[name] || state.finishOrder.includes(name)) return;
+  const position = Object.keys(state.players).length;
+  state.finishOrder.push(name);
+  state.tables.forEach(t => t.seats = t.seats.map(p => p === name ? null : p));
+  delete state.players[name];
+  const remaining = allSeats().filter(x=>x.player).length;
+  if (remaining === 8) { randomiseFinalEight(); toast("8 players left — final table randomised."); }
+  else if (remaining > 1) { rebalanceOnePlayer(); toast(name + " recorded as " + ordinal(position) + ". One player moved to balance the tables."); }
+  else toast(name + " recorded as " + ordinal(position) + ". The remaining player is 1st.");
+  save(); render();
+}
+
+function resetFinishOrder() {
+  if (!state.finishOrder.length) return;
+  if (!confirm("Reset all finishing positions for this tournament?")) return;
+  state.finishOrder = []; save(); render();
+}
+
+function rebalanceOnePlayer() {
+  const active = allSeats().filter(x=>x.player);
+  if (active.length <= 8) return;
+
+  const counts = state.tables.map(t=>t.seats.filter(Boolean).length);
+  const maxCount = Math.max(...counts);
+  const minCount = Math.min(...counts);
+  if (maxCount - minCount <= 1) return;
+
+  const fullest = state.tables.filter((t,i)=>counts[i]===maxCount);
+  const emptiest = state.tables.filter((t,i)=>counts[i]===minCount);
+  const from = fullest[Math.floor(Math.random()*fullest.length)];
+  const to = emptiest[Math.floor(Math.random()*emptiest.length)];
+
+  const candidates = from.seats
+    .map((p,i)=>({p,i}))
+    .filter(x=>x.p && !(from.number===1 && x.i===2));
+  if (!candidates.length) return;
+
+  const picked = candidates[Math.floor(Math.random()*candidates.length)];
+  const free = to.seats.map((p,i)=>!p && !(to.number===1&&i===2)?i:-1).filter(i=>i>=0);
+  if (!free.length) return;
+
+  const seat = free[Math.floor(Math.random()*free.length)];
+  from.seats[picked.i] = null;
+  to.seats[seat] = picked.p;
+}
+
+function removePlayer(name) {
+  state.tables.forEach(t=>t.seats=t.seats.map(p=>p===name?null:p));
+  delete state.players[name];
+
+  const total = allSeats().filter(x=>x.player).length;
+  if (total === 8) {
+    randomiseFinalEight();
+    toast("8 players left — final table randomised.");
+  } else {
+    // Do NOT reshuffle everyone. Move only one player when a table has
+    // more players than another table.
+    rebalanceOnePlayer();
+    toast("Player removed — one player moved to improve table balance.");
+  }
+  save(); render();
+}
+function endTournament() {
+  const seated = allSeats().filter(x=>x.player);
+  if (seated.length !== 1) { toast(`Finish ${Math.max(0,seated.length-1)} more eliminated player${seated.length-1===1?"":"s"} first.`); return; }
+  const winner=seated[0];
+  const positions=[];
+  state.finishOrder.slice().reverse().forEach((player,idx)=>positions.push({position:idx+2,player}));
+  positions.unshift({position:1,player:winner.player,table:winner.table,seat:winner.seat});
+  const lines=positions.map(x=>`${ordinal(x.position)} — ${x.player}${x.table?` (Table ${x.table}, Seat ${x.seat})`:""}`);
+  const record={id:Date.now(),date:state.tournamentDate,players:positions,emailBody:`Poker tournament results — ${state.tournamentDate}\n\n${lines.join("\n")}`};
+  state.history.unshift(record); save(); render();
+  const subject=encodeURIComponent(`Poker Tournament Results - ${state.tournamentDate}`);
+  const body=encodeURIComponent(record.emailBody);
+  window.location.href=`mailto:pwarren300@gmail.com?subject=${subject}&body=${body}`;
+  toast("Tournament saved to history and email draft opened.");
+}
+
+function render() {
+  ensurePaul();
+  const total=allSeats().filter(x=>x.player).length;
+  const tables=state.tables.length;
+  const normal=total-(state.players["Paul W"]?1:0);
+  const finalMode = total === 8;
+  document.getElementById("status").innerHTML =
+    `<b>${total}</b> player${total===1?"":"s"} seated across <b>${tables}</b> table${tables===1?"":"s"} · ` +
+    (finalMode ? `<b>FINAL TABLE — all 8 players are random.</b>` :
+      `Ideal balance: ${Math.floor(total/tables)}–${Math.ceil(total/tables)} players per table.`);
+  const root=document.getElementById("tables");
+  root.innerHTML="";
+  state.tables.forEach(t=>{
+    const card=document.createElement("div"); card.className="table-card";
+    const occupied=t.seats.filter(Boolean).length;
+    card.innerHTML=`<div class="table-head">
+      <div><div class="table-title">Table ${t.number}</div><div class="count">${occupied}/8 seats</div></div>
+      <button class="danger remove" onclick="removeSpecificTable(${t.number})" ${tables===1?"disabled":""}>Remove</button>
+    </div>`;
+    const seats=document.createElement("div"); seats.className="seats";
+    t.seats.forEach((p,i)=>{
+      const s=document.createElement("div"); s.className="seat"+(t.number===1&&i===2?" fixed":"");
+      s.innerHTML=`<div class="seat-num">Seat ${i+1}${t.number===1&&i===2?" · FIXED":""}</div><div class="${p?"player":"empty"}">${p||"Empty"}</div>`;
+      if(p && p!=="Paul W") s.title="Double-click to remove player";
+      if(p && p!=="Paul W") s.ondblclick=()=>{ if(confirm("Remove "+p+" from the game?")) removePlayer(p); };
+      seats.appendChild(s);
+    });
+    card.appendChild(seats);
+    const hint=document.createElement("div"); hint.className="hint";
+    hint.textContent="New players get a random empty seat. Adding/removing tables rebalances everyone. Paul W stays fixed until the game reaches exactly 8 players; then the final table is completely random. Double-click a player's seat to remove them.";
+    card.appendChild(hint); root.appendChild(card);
+  });
+  const history=document.getElementById("historyList");
+  history.innerHTML="";
+  if (!state.history.length) {
+    history.innerHTML='<span class="empty">No completed tournaments yet.</span>';
+  } else {
+    state.history.slice(0,10).forEach((r)=>{
+      const p=document.createElement("div");
+      p.className="pill";
+      p.style.width="100%";
+      p.textContent=`${r.date} · ${r.players.length} players · completed`;
+      p.title=r.players.map((x,i)=>`${i+1}. ${x.player} — T${x.table} S${x.seat}`).join("\n");
+      history.appendChild(p);
+    });
+  }
+
+  const list=document.getElementById("playerList"); list.innerHTML="";
+  const names=allSeats().filter(x=>x.player).sort((a,b)=>a.player.localeCompare(b.player));
+  if(!names.length) list.innerHTML='<span class="empty">No players yet.</span>';
+  names.forEach(x=>{
+    const p=document.createElement("span"); p.className="pill"; p.style.display="inline-flex"; p.style.alignItems="center"; p.style.gap="8px";
+    const label=document.createElement("span"); label.textContent=`${x.player} · T${x.table} S${x.seat}`; p.appendChild(label);
+    if (!state.finishOrder.includes(x.player)) {
+      const btn=document.createElement("button"); btn.textContent="Finish"; btn.style.padding="5px 8px"; btn.style.fontSize="11px"; btn.onclick=()=>finishPlayer(x.player); p.appendChild(btn);
+    }
+    list.appendChild(p);
+  });
+  const finishList=document.getElementById("finishList");
+  if (finishList) {
+    finishList.innerHTML="";
+    if (!state.finishOrder.length) finishList.innerHTML='<span class="empty">No finishing positions recorded yet.</span>';
+    else state.finishOrder.slice().reverse().forEach((name,idx)=>{ const p=document.createElement("span"); p.className="pill"; p.textContent=`${ordinal(idx+2)} — ${name}`; finishList.appendChild(p); });
+    if (Object.keys(state.players).length===1) { const winner=Object.keys(state.players)[0]; const p=document.createElement("span"); p.className="pill"; p.textContent=`1st — ${winner}`; finishList.prepend(p); }
+  }
+  save();
+}
+function removeSpecificTable(num) {
+  if(state.tables.length<=1) return;
+  const idx=state.tables.findIndex(t=>t.number===num);
+  if(idx<0) return;
+  const removed=state.tables.splice(idx,1)[0];
+  // Gather all players from every table, then rebuild.
+  const names=[];
+  state.tables.forEach(t=>t.seats.forEach(p=>{if(p&&p!=="Paul W")names.push(p);}));
+  removed.seats.forEach(p=>{if(p&&p!=="Paul W")names.push(p);});
+  // Renumber tables, preserving Table 1.
+  state.tables.sort((a,b)=>a.number-b.number);
+  state.tables.forEach((t,i)=>{t.number=i+1;t.seats=Array(MAX_SEATS).fill(null);});
+  state.tables[0].seats[2]="Paul W";
+  for(let i=names.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[names[i],names[j]]=[names[j],names[i]];}
+  names.forEach(placeRandomly);
+  if (allSeats().filter(x=>x.player).length === 8) randomiseFinalEight();
+  save(); render(); toast(allSeats().filter(x=>x.player).length === 8 ? "Final table randomised." : "Table removed and players rebalanced.");
+}
+document.getElementById("nameInput").addEventListener("keydown",e=>{if(e.key==="Enter")addPlayer();});
+document.getElementById("tournamentDate").addEventListener("change", e => {
+  state.tournamentDate = e.target.value;
+  save();
+});
+render();
+</script>
+</body>
+</html>
