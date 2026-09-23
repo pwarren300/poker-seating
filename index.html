@@ -45,52 +45,75 @@ let pollTimer=null;
 let realtimeChannel=null;
 
 function makeTable(num){return{number:num,seats:Array(MAX_SEATS).fill(null)}}
-function blankState(){return{tables:[makeTable(1)],players:{},tournamentDate:new Date().toISOString().slice(0,10),tournamentName:'',finishOrder:[],status:'active'}}
+function blankState(){return{tables:[makeTable(1)],players:{},finalTableStarted:false,tournamentDate:new Date().toISOString().slice(0,10),tournamentName:'',finishOrder:[],status:'active'}}
 function loadLocal(){try{const x=JSON.parse(localStorage.getItem('pokerSeatingV1'));if(x&&Array.isArray(x.tables)){x.finishOrder=Array.isArray(x.finishOrder)?x.finishOrder:[];x.status=x.status||'active';x.tournamentDate=x.tournamentDate||new Date().toISOString().slice(0,10);x.tournamentName=x.tournamentName||'';return x}}catch(e){}return blankState()}
 function cache(){localStorage.setItem('pokerSeatingV1',JSON.stringify(state))}
 function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.style.display='block';clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.style.display='none',2500)}
 function allSeats(){const a=[];state.tables.forEach(t=>t.seats.forEach((p,i)=>a.push({table:t.number,seat:i+1,player:p})));return a}
-function finalTableMode(){return allSeats().filter(x=>x.player).length<=8}
-function ensurePaul(){if(finalTableMode())return;let paul=null;state.tables.forEach(t=>t.seats.forEach((p,i)=>{if(p&&p.toLowerCase()==='paul w')paul={t,i}}));const t1=state.tables.find(t=>t.number===1);if(!t1)return;if(t1.seats[2]!=='Paul W'){if(t1.seats[2]){const d=t1.seats[2];t1.seats[2]=null;placeRandomly(d)}if(paul)paul.t.seats[paul.i]=null;t1.seats[2]='Paul W'}}
-function placeRandomly(name){const free=[];state.tables.forEach(t=>t.seats.forEach((p,i)=>{if(!p&&!(t.number===1&&i===2))free.push({t,i})}));if(!free.length)return false;const x=free[Math.floor(Math.random()*free.length)];x.t.seats[x.i]=name;return true}
-function collapseToFinalTable(){const names=Object.keys(state.players);if(names.length>8)return false;if(state.tables.length===1)return false;state.tables=[makeTable(1)];return true}
-function randomiseFinalEight(){const names=allSeats().filter(x=>x.player).map(x=>x.player);if(names.length!==8)return false;state.tables=[makeTable(1)];for(let i=names.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[names[i],names[j]]=[names[j],names[i]]}state.tables[0].seats=names.slice();return true}
+function finalTableMode(){return !!state.finalTableStarted}
+function ensurePaul(){
+  // Never create Paul from thin air: he must be in the active player roster.
+  if(finalTableMode() || !Object.keys(state.players).some(n=>n.toLowerCase()==='paul w'))return;
+  const t1=state.tables.find(t=>t.number===1);if(!t1)return;
+  const current=allSeats().find(x=>x.player&&x.player.toLowerCase()==='paul w');
+  if(t1.seats[2]==='Paul W')return;
+  // Free the reserved seat before moving its occupant, so a full table cannot lose anyone.
+  const displaced=t1.seats[2];t1.seats[2]=null;
+  if(current){const t=state.tables.find(t=>t.number===current.table);t.seats[current.seat-1]=null;}
+  t1.seats[2]='Paul W';
+  if(displaced && displaced.toLowerCase()!=='paul w')placeRandomly(displaced);
+}
+function placeRandomly(name){const free=[];state.tables.forEach(t=>t.seats.forEach((p,i)=>{if(!p&&!(!state.finalTableStarted&&t.number===1&&i===2&&state.players['Paul W']))free.push({t,i})}));if(!free.length)return false;const x=free[Math.floor(Math.random()*free.length)];x.t.seats[x.i]=name;return true}
+function collapseToFinalTable(){
+  if(Object.keys(state.players).length>8 || state.tables.length===1)return false;
+  const names=allSeats().filter(x=>x.player).map(x=>x.player);
+  state.tables=[makeTable(1)];
+  names.forEach((name,i)=>state.tables[0].seats[i]=name);
+  return true;
+}
+function randomiseFinalEight(){
+  const names=Object.keys(state.players);
+  if(names.length!==8)return false;
+  state.finalTableStarted=true;
+  state.tables=[makeTable(1)];
+  for(let i=names.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[names[i],names[j]]=[names[j],names[i]]}
+  state.tables[0].seats=names.slice();return true;
+}
 function addPlayer(){
- const input=document.getElementById('nameInput'),name=input.value.trim();
- if(!name)return;
+ const input=document.getElementById('nameInput'),name=input.value.trim();if(!name)return;
  const canonical=name.toLowerCase()==='paul w'?'Paul W':name;
  if(Object.keys(state.players).some(k=>k.toLowerCase()===canonical.toLowerCase()))return toast('That player is already seated.');
- const before=Object.keys(state.players).length;
- if(before<=8&&state.tables.length>1){collapseToFinalTable();}
+ normalizeTables();const before=Object.keys(state.players).length;
+ if(before<=8&&state.tables.length>1)collapseToFinalTable();
  state.players[canonical]=true;
  const total=Object.keys(state.players).length;
- const needed=Math.max(1,Math.ceil(total/MAX_SEATS));
- let opened=false;
+ if(total>8)state.finalTableStarted=false;
+ const needed=Math.max(1,Math.ceil(total/MAX_SEATS));let opened=false;
  while(state.tables.length<needed){state.tables.push(makeTable(state.tables.length+1));opened=true}
- if(total===8){
-   randomiseFinalEight();
- }else if(opened){
-   rebalance();
-   toast('Table '+state.tables.length+' opened automatically — players balanced.');
- }else{
-   placeRandomly(canonical);
+ if(total===8 && !state.finalTableStarted){randomiseFinalEight();toast('Final eight — seats randomised.');}
+ else if(opened){rebalance();toast('Table '+state.tables.length+' opened automatically — players balanced.');}
+ else {
+   if(canonical==='Paul W' && !state.finalTableStarted){
+     const t1=state.tables.find(t=>t.number===1),displaced=t1.seats[2];
+     t1.seats[2]='Paul W';if(displaced)placeRandomly(displaced);
+   } else if(!placeRandomly(canonical)){
+     delete state.players[canonical];return toast('No empty seat available.');
+   }
    ensurePaul();
  }
- input.value='';
- saveAndRender();
+ input.value='';saveAndRender();
 }
-
 function addTable(){const total=Object.keys(state.players).length;if(total<=8)return toast('Up to 8 players use one final table. Table 2 opens automatically for player 9.');state.tables.push(makeTable(state.tables.length+1));rebalance();saveAndRender('Tables rebalanced.')}
-function removeTable(){if(state.tables.length<=1)return toast('You must keep at least one table.');const total=Object.keys(state.players).length;if(total>(state.tables.length-1)*MAX_SEATS)return toast('Cannot remove this table — there are not enough seats.');const names=Object.keys(state.players);state.tables.pop();state.tables.forEach((t,i)=>{t.number=i+1;t.seats=Array(MAX_SEATS).fill(null)});if(names.length<=8){randomiseFinalEight()}else{rebalance()}saveAndRender('Table removed and players rebalanced.')}
+function removeTable(){if(state.tables.length<=1)return toast('You must keep at least one table.');const total=Object.keys(state.players).length;if(total>(state.tables.length-1)*MAX_SEATS)return toast('Cannot remove this table — there are not enough seats.');state.tables.pop();state.tables.forEach((t,i)=>t.number=i+1);if(total<=8){collapseToFinalTable();if(total===8)randomiseFinalEight()}else{rebalance()}saveAndRender('Table removed and players rebalanced.')}
 function rebalance(){
- const names=Object.keys(state.players).filter(n=>n!=='Paul W');
+ const names=Object.keys(state.players).filter(n=>n.toLowerCase()!=='paul w');
  state.tables.forEach(t=>t.seats=Array(MAX_SEATS).fill(null));
- const total=names.length+(state.players['Paul W']?1:0);
+ const total=Object.keys(state.players).length;
  const tableCount=state.tables.length;
  const base=Math.floor(total/tableCount);
  const extra=total%tableCount;
  const targets=state.tables.map((t,i)=>base+(i<extra?1:0));
- if(state.players['Paul W']){
+ if(Object.keys(state.players).some(n=>n.toLowerCase()==='paul w')){
    state.tables[0].seats[2]='Paul W';
  }
  for(let i=names.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[names[i],names[j]]=[names[j],names[i]]}
@@ -106,35 +129,44 @@ function rebalance(){
 }
 
 function normalizeTables(){
- const total=Object.keys(state.players).length;
- const needed=Math.max(1,Math.ceil(total/MAX_SEATS));
- if(total<=8){
-   if(state.tables.length!==1){
-     state.tables=[makeTable(1)];
-     const names=Object.keys(state.players);
-     if(names.length===8){
-       for(let i=names.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[names[i],names[j]]=[names[j],names[i]]}
-     }
-     state.tables[0].seats=names.slice();
-     return true;
-   }
-   return false;
- }
- let changed=false;
- while(state.tables.length<needed){state.tables.push(makeTable(state.tables.length+1));changed=true}
- if(state.tables.length>needed){
-   state.tables=state.tables.slice(0,needed);
-   state.tables.forEach((t,i)=>{t.number=i+1;t.seats=Array(MAX_SEATS).fill(null)});
-   changed=true;
- }
- state.tables.forEach((t,i)=>t.number=i+1);
- const counts=state.tables.map(t=>t.seats.filter(Boolean).length);
- const balanced=counts.every(c=>c===Math.floor(total/state.tables.length)||c===Math.ceil(total/state.tables.length));
- const seatedNames=allSeats().filter(x=>x.player).map(x=>x.player).sort();
- const stateNames=Object.keys(state.players).sort();
- const samePlayers=seatedNames.length===stateNames.length&&seatedNames.every((n,i)=>n===stateNames[i]);
- if(changed||!balanced||!samePlayers){rebalance();changed=true}
- return changed;
+  const roster=Object.keys(state.players||{});
+  const total=roster.length;
+  const needed=Math.max(1,Math.ceil(total/MAX_SEATS));
+  if(!Array.isArray(state.tables)||!state.tables.length)state.tables=[makeTable(1)];
+  // Older saves have no finalTableStarted flag. A multi-table tournament that
+  // has reached eight players is already at the final table.
+  if(state.finalTableStarted===undefined)state.finalTableStarted=false;
+  if(total===8 && !state.finalTableStarted)return randomiseFinalEight();
+  let changed=false;
+  if(total<=8 && state.tables.length>1){
+    const seated=allSeats().filter(x=>x.player).map(x=>x.player);
+    state.tables=[makeTable(1)];seated.slice(0,8).forEach((n,i)=>state.tables[0].seats[i]=n);
+    changed=true;
+  }
+  while(state.tables.length<needed){state.tables.push(makeTable(state.tables.length+1));changed=true}
+  if(state.tables.length>needed){state.tables=state.tables.slice(0,needed);changed=true}
+  state.tables.forEach((t,i)=>{t.number=i+1;t.seats=(Array.isArray(t.seats)?t.seats:[]).slice(0,8);while(t.seats.length<8)t.seats.push(null)});
+  const seen=new Set();
+  state.tables.forEach(t=>t.seats=t.seats.map(n=>{
+    if(!n)return null;
+    const canonical=roster.find(r=>r.toLowerCase()===String(n).toLowerCase());
+    if(!canonical||seen.has(canonical.toLowerCase())){changed=true;return null}
+    seen.add(canonical.toLowerCase());return canonical;
+  }));
+  for(const name of roster){if(!seen.has(name.toLowerCase())){
+    // Repair invisible players (including Paul W) left in the roster by old versions.
+    if(!placeRandomly(name))rebalance();changed=true;
+  }}
+  if(!state.finalTableStarted && roster.some(n=>n.toLowerCase()==='paul w')){
+    const before=allSeats().find(x=>x.player==='Paul W');
+    ensurePaul();const after=allSeats().find(x=>x.player==='Paul W');
+    if(!before||!after||before.table!==after.table||before.seat!==after.seat)changed=true;
+  }
+  if(total>8){
+    const counts=state.tables.map(t=>t.seats.filter(Boolean).length);
+    if(Math.max(...counts)-Math.min(...counts)>1){rebalance();changed=true}
+  }
+  return changed;
 }
 
 function ordinal(n){if(n%100>=11&&n%100<=13)return n+'th';return n+({1:'st',2:'nd',3:'rd'}[n%10]||'th')}
@@ -184,18 +216,18 @@ async function editHistoryName(row){const current=(row.state&&row.state.tourname
 async function deleteHistoryTournament(row){const title=(row.state&&row.state.tournamentName)||'Poker Tournament';if(!confirm('Delete '+title+' from '+row.tournament_date+'? This cannot be undone.'))return;const {error}=await sb.from('poker_tournaments').delete().eq('id',row.id);if(error)return toast('Could not delete tournament: '+error.message);window.historyRows=(window.historyRows||[]).filter(x=>x.id!==row.id);if(window.viewingHistory&&tournamentId===row.id){window.viewingHistory=false;tournamentId=null;state=blankState();state.status='completed';state.finalResults=[];document.getElementById('backHistoryBtn').classList.add('hidden');render()}renderHistory();toast('Tournament deleted.')}
 async function deleteAllHistory(){const rows=window.historyRows||[];if(!rows.length)return;const ok=confirm('Delete all '+rows.length+' completed tournaments from history? This cannot be undone.');if(!ok)return;const {error}=await sb.from('poker_tournaments').delete().eq('status','completed');if(error)return toast('Could not delete history: '+error.message);window.historyRows=[];if(window.viewingHistory){window.viewingHistory=false;tournamentId=null;state=blankState();state.status='completed';state.finalResults=[];document.getElementById('backHistoryBtn').classList.add('hidden');render()}renderHistory();toast('Tournament history deleted.')}
 async function openHistoryTournament(row){if(realtimeChannel){await sb.removeChannel(realtimeChannel);realtimeChannel=null}clearInterval(pollTimer);window.viewingHistory=true;state=row.state||blankState();state.status='completed';state.tournamentDate=row.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';tournamentId=row.id;document.getElementById('backHistoryBtn').classList.remove('hidden');document.getElementById('newTournamentBtn').classList.remove('hidden');render();window.scrollTo({top:0,behavior:'smooth'});toast('Viewing completed tournament from '+state.tournamentDate+'.')}
-async function exitHistoryView(){window.viewingHistory=false;const {data,error}=await sb.from('poker_tournaments').select('id,tournament_date,state,updated_at').eq('status','active').order('updated_at',{ascending:false}).limit(1);if(error){toast('Could not load current tournament.');return}if(data&&data.length){tournamentId=data[0].id;state=data[0].state||blankState();state.status='active';state.tournamentDate=data[0].tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=data[0].updated_at}else{tournamentId=null;lastCloudUpdatedAt=null;state=blankState();state.status='completed';state.finalResults=[]}document.getElementById('backHistoryBtn').classList.add('hidden');document.getElementById('newTournamentBtn').classList.toggle('hidden',state.status!=='completed');render();if(tournamentId){setupRealtime();clearInterval(pollTimer);pollTimer=setInterval(pollCloud,3000)}}
+async function exitHistoryView(){window.viewingHistory=false;const {data,error}=await sb.from('poker_tournaments').select('id,tournament_date,state,updated_at').eq('status','active').order('updated_at',{ascending:false}).limit(1);if(error){toast('Could not load current tournament.');return}if(data&&data.length){tournamentId=data[0].id;state=data[0].state||blankState();state.status='active';state.tournamentDate=data[0].tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=data[0].updated_at;if(normalizeTables())await saveCloud()}else{tournamentId=null;lastCloudUpdatedAt=null;state=blankState();state.status='completed';state.finalResults=[]}document.getElementById('backHistoryBtn').classList.add('hidden');document.getElementById('newTournamentBtn').classList.toggle('hidden',state.status!=='completed');render();if(tournamentId){setupRealtime();clearInterval(pollTimer);pollTimer=setInterval(pollCloud,3000)}}
 
-function render(){const completed=state.status==='completed'||window.viewingHistory;const activeCount=Object.keys(state.players||{}).length;document.getElementById('tournamentDate').value=state.tournamentDate;document.getElementById('tournamentName').value=state.tournamentName||'';document.getElementById('newTournamentBtn').classList.toggle('hidden',!completed||!!window.viewingHistory&&activeCount>0);document.getElementById('backHistoryBtn').classList.toggle('hidden',!window.viewingHistory);if(completed){const hasResults=(state.finalResults||[]).length>0;document.getElementById('status').innerHTML=hasResults?'<b>🏆 Tournament ended</b> · '+state.tournamentDate+'<br><span style="color:#cbd5e1">Results are saved in Tournament History.</span>':'<b>♠ No active tournament</b><br><span style="color:#cbd5e1">Start a new tournament when you are ready.</span>';document.getElementById('tables').innerHTML=hasResults?'<div class="players" style="margin-top:0"><h2>🏆 Final result</h2><div class="player-list">'+(state.finalResults||[]).map(x=>'<span class="pill">'+ordinal(x.position)+' — '+x.player+'</span>').join('')+'</div></div>':'<div class="players" style="margin-top:0"><h2>Ready for the next game?</h2><div class="small">Your completed tournaments are safely stored in Tournament History below.</div></div>';document.getElementById('tournamentName').disabled=true;document.getElementById('tournamentDate').disabled=true;document.getElementById('nameInput').disabled=true;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=true;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=true}else{ensurePaul();document.getElementById('tournamentName').disabled=false;document.getElementById('tournamentDate').disabled=false;document.getElementById('nameInput').disabled=false;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=false;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=false;const total=allSeats().filter(x=>x.player).length,tables=state.tables.length,finalMode=total<=8;document.getElementById('status').innerHTML='<b>'+total+'</b> player'+(total===1?'':'s')+' seated across <b>'+tables+'</b> table'+(tables===1?'':'s')+' · '+(finalMode?'<b>FINAL TABLE — players are random.</b>':'Ideal balance: '+Math.floor(total/tables)+'–'+Math.ceil(total/tables)+' players per table.');const root=document.getElementById('tables');root.innerHTML='';state.tables.forEach(t=>{const card=document.createElement('div');card.className='table-card';const occupied=t.seats.filter(Boolean).length;card.innerHTML='<div class="table-head"><div><div class="table-title">Table '+t.number+'</div><div class="count">'+occupied+'/8 seats</div></div><button class="danger remove" onclick="removeSpecificTable('+t.number+')" '+(tables===1?'disabled':'')+'>Remove</button></div>';const seats=document.createElement('div');seats.className='seats';t.seats.forEach((p,i)=>{const ss=document.createElement('div');ss.className='seat'+(t.number===1&&i===2&&!finalMode?' fixed':'');ss.innerHTML='<div class="seat-num">Seat '+(i+1)+(t.number===1&&i===2&&!finalMode?' · FIXED':'')+'</div><div class="'+(p?'player':'empty')+'">'+(p||'Empty')+'</div>';if(p){ss.style.cursor='pointer';ss.title='Double-click for player options';ss.ondblclick=()=>openPlayerActions(p)};seats.appendChild(ss)});card.appendChild(seats);const hint=document.createElement('div');hint.className='hint';hint.textContent='New players get a random empty seat. Adding/removing tables rebalances everyone. During eliminations only one player moves when needed. At exactly 8 players the final table is completely random; below 8, players stay where they are.';card.appendChild(hint);root.appendChild(card)})}const list=document.getElementById('playerList');list.innerHTML='';if(completed){list.innerHTML='<span class="empty">No active players — tournament has ended.</span>'}else{const names=allSeats().filter(x=>x.player).sort((a,b)=>a.player.localeCompare(b.player));if(!names.length)list.innerHTML='<span class="empty">No players yet.</span>';names.forEach(x=>{const p=document.createElement('span');p.className='pill';p.style.display='inline-flex';p.style.alignItems='center';p.style.gap='8px';const label=document.createElement('span');label.textContent=x.player+' · T'+x.table+' S'+x.seat;p.appendChild(label);label.title='Double-click for player options';label.style.cursor='pointer';label.ondblclick=()=>openPlayerActions(x.player);const btn=document.createElement('button');btn.textContent='Finish';btn.style.padding='5px 8px';btn.style.fontSize='11px';btn.onclick=()=>finishPlayer(x.player);p.appendChild(btn);list.appendChild(p)})}const fl=document.getElementById('finishList');fl.innerHTML='';if(completed){(state.finalResults||[]).forEach(x=>{const p=document.createElement('span');p.className='pill';p.textContent=ordinal(x.position)+' — '+x.player;fl.appendChild(p)})}else{if(!state.finishOrder.length)fl.innerHTML='<span class="empty">No finishing positions recorded yet.</span>';else state.finishOrder.slice().reverse().forEach((n,i)=>{const pp=document.createElement('span');pp.className='pill';pp.textContent=ordinal(i+2)+' — '+n;fl.appendChild(pp)});if(Object.keys(state.players).length===1){const winner=Object.keys(state.players)[0],pp=document.createElement('span');pp.className='pill';pp.textContent='1st — '+winner;fl.prepend(pp)}}renderHistory();cache()}
+function render(){const completed=state.status==='completed'||window.viewingHistory;const activeCount=Object.keys(state.players||{}).length;document.getElementById('tournamentDate').value=state.tournamentDate;document.getElementById('tournamentName').value=state.tournamentName||'';document.getElementById('newTournamentBtn').classList.toggle('hidden',!completed||!!window.viewingHistory&&activeCount>0);document.getElementById('backHistoryBtn').classList.toggle('hidden',!window.viewingHistory);if(completed){const hasResults=(state.finalResults||[]).length>0;document.getElementById('status').innerHTML=hasResults?'<b>🏆 Tournament ended</b> · '+state.tournamentDate+'<br><span style="color:#cbd5e1">Results are saved in Tournament History.</span>':'<b>♠ No active tournament</b><br><span style="color:#cbd5e1">Start a new tournament when you are ready.</span>';document.getElementById('tables').innerHTML=hasResults?'<div class="players" style="margin-top:0"><h2>🏆 Final result</h2><div class="player-list">'+(state.finalResults||[]).map(x=>'<span class="pill">'+ordinal(x.position)+' — '+x.player+'</span>').join('')+'</div></div>':'<div class="players" style="margin-top:0"><h2>Ready for the next game?</h2><div class="small">Your completed tournaments are safely stored in Tournament History below.</div></div>';document.getElementById('tournamentName').disabled=true;document.getElementById('tournamentDate').disabled=true;document.getElementById('nameInput').disabled=true;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=true;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=true}else{ensurePaul();document.getElementById('tournamentName').disabled=false;document.getElementById('tournamentDate').disabled=false;document.getElementById('nameInput').disabled=false;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=false;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=false;const total=allSeats().filter(x=>x.player).length,tables=state.tables.length,finalMode=!!state.finalTableStarted;document.getElementById('status').innerHTML='<b>'+total+'</b> player'+(total===1?'':'s')+' seated across <b>'+tables+'</b> table'+(tables===1?'':'s')+' · '+(finalMode?'<b>FINAL TABLE — players are random.</b>':'Ideal balance: '+Math.floor(total/tables)+'–'+Math.ceil(total/tables)+' players per table.');const root=document.getElementById('tables');root.innerHTML='';state.tables.forEach(t=>{const card=document.createElement('div');card.className='table-card';const occupied=t.seats.filter(Boolean).length;card.innerHTML='<div class="table-head"><div><div class="table-title">Table '+t.number+'</div><div class="count">'+occupied+'/8 seats</div></div><button class="danger remove" onclick="removeSpecificTable('+t.number+')" '+(tables===1?'disabled':'')+'>Remove</button></div>';const seats=document.createElement('div');seats.className='seats';t.seats.forEach((p,i)=>{const ss=document.createElement('div');ss.className='seat'+(t.number===1&&i===2&&!finalMode?' fixed':'');ss.innerHTML='<div class="seat-num">Seat '+(i+1)+(t.number===1&&i===2&&!finalMode?' · FIXED':'')+'</div><div class="'+(p?'player':'empty')+'">'+(p||'Empty')+'</div>';if(p){ss.style.cursor='pointer';ss.title='Double-click for player options';ss.ondblclick=()=>openPlayerActions(p)};seats.appendChild(ss)});card.appendChild(seats);const hint=document.createElement('div');hint.className='hint';hint.textContent='New players get a random empty seat. Adding/removing tables rebalances everyone. During eliminations only one player moves when needed. At exactly 8 players the final table is completely random; below 8, players stay where they are.';card.appendChild(hint);root.appendChild(card)})}const list=document.getElementById('playerList');list.innerHTML='';if(completed){list.innerHTML='<span class="empty">No active players — tournament has ended.</span>'}else{const names=allSeats().filter(x=>x.player).sort((a,b)=>a.player.localeCompare(b.player));if(!names.length)list.innerHTML='<span class="empty">No players yet.</span>';names.forEach(x=>{const p=document.createElement('span');p.className='pill';p.style.display='inline-flex';p.style.alignItems='center';p.style.gap='8px';const label=document.createElement('span');label.textContent=x.player+' · T'+x.table+' S'+x.seat;p.appendChild(label);label.title='Double-click for player options';label.style.cursor='pointer';label.ondblclick=()=>openPlayerActions(x.player);const btn=document.createElement('button');btn.textContent='Finish';btn.style.padding='5px 8px';btn.style.fontSize='11px';btn.onclick=()=>finishPlayer(x.player);p.appendChild(btn);list.appendChild(p)})}const fl=document.getElementById('finishList');fl.innerHTML='';if(completed){(state.finalResults||[]).forEach(x=>{const p=document.createElement('span');p.className='pill';p.textContent=ordinal(x.position)+' — '+x.player;fl.appendChild(p)})}else{if(!state.finishOrder.length)fl.innerHTML='<span class="empty">No finishing positions recorded yet.</span>';else state.finishOrder.slice().reverse().forEach((n,i)=>{const pp=document.createElement('span');pp.className='pill';pp.textContent=ordinal(i+2)+' — '+n;fl.appendChild(pp)});if(Object.keys(state.players).length===1){const winner=Object.keys(state.players)[0],pp=document.createElement('span');pp.className='pill';pp.textContent='1st — '+winner;fl.prepend(pp)}}renderHistory();cache()}
 
-function removeSpecificTable(num){if(state.tables.length<=1)return;const total=Object.keys(state.players).length;if(total>(state.tables.length-1)*MAX_SEATS)return toast('Cannot remove this table — there are not enough seats.');const idx=state.tables.findIndex(t=>t.number===num);if(idx<0)return;state.tables.splice(idx,1);state.tables.forEach((t,i)=>{t.number=i+1;t.seats=Array(MAX_SEATS).fill(null)});if(total<=8)randomiseFinalEight();else rebalance();saveAndRender('Table removed and players rebalanced.')}
+function removeSpecificTable(num){if(state.tables.length<=1)return;const total=Object.keys(state.players).length;if(total>(state.tables.length-1)*MAX_SEATS)return toast('Cannot remove this table — there are not enough seats.');const idx=state.tables.findIndex(t=>t.number===num);if(idx<0)return;state.tables.splice(idx,1);state.tables.forEach((t,i)=>t.number=i+1);if(total<=8){collapseToFinalTable();if(total===8)randomiseFinalEight()}else rebalance();saveAndRender('Table removed and players rebalanced.')}
 document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')addPlayer()});document.getElementById('tournamentDate').addEventListener('change',e=>{state.tournamentDate=e.target.value;saveAndRender()});document.getElementById('tournamentName').addEventListener('change',e=>{state.tournamentName=e.target.value.trim();saveAndRender()});
 async function login(){const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;const msg=document.getElementById('authMsg');if(!email||!password){msg.textContent='Enter your email and password.';return}document.getElementById('loginBtn').disabled=true;msg.textContent='Signing in…';const {error}=await sb.auth.signInWithPassword({email,password});document.getElementById('loginBtn').disabled=false;if(error){msg.textContent=error.message;return}msg.textContent=''}
 async function logout(){await sb.auth.signOut()}
 async function start(){const {data:{session}}=await sb.auth.getSession();if(session)await signedIn(session);sb.auth.onAuthStateChange(async(event,session)=>{if(session)await signedIn(session);else{document.getElementById('app').style.display='none';document.getElementById('auth').classList.remove('hidden')}})}
-async function signedIn(session){window.viewingHistory=false;document.getElementById('auth').classList.add('hidden');document.getElementById('app').style.display='block';document.getElementById('syncStatus').textContent='Loading cloud…';const {data,error}=await sb.from('poker_tournaments').select('id,tournament_date,state,updated_at').eq('status','active').order('updated_at',{ascending:false}).limit(1);if(error){document.getElementById('syncStatus').textContent='Cloud error';toast(error.message);return}if(data&&data.length){tournamentId=data[0].id;state=data[0].state||blankState();state.tournamentDate=data[0].tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';state.status='active';lastCloudUpdatedAt=data[0].updated_at;cache();normalizeTables()}else{tournamentId=null;lastCloudUpdatedAt=null;state=blankState();state.status='completed';state.finalResults=[];cache()}await loadHistory();render();document.getElementById('syncStatus').textContent='Cloud connected';setupRealtime();clearInterval(pollTimer);pollTimer=setInterval(pollCloud,3000)}
-function setupRealtime(){if(!tournamentId)return;if(realtimeChannel)sb.removeChannel(realtimeChannel);realtimeChannel=sb.channel('poker-'+tournamentId).on('postgres_changes',{event:'UPDATE',schema:'public',table:'poker_tournaments',filter:'id=eq.'+tournamentId},payload=>{const row=payload.new;if(row.updated_at===lastCloudUpdatedAt)return;state=row.state||state;state.tournamentDate=row.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=row.updated_at;render()}).subscribe()}
-async function pollCloud(){if(!tournamentId)return;const {data,error}=await sb.from('poker_tournaments').select('state,tournament_date,updated_at,status').eq('id',tournamentId).single();if(error||!data||data.status!=='active')return;if(lastCloudUpdatedAt&&new Date(data.updated_at)<=new Date(lastCloudUpdatedAt))return;state=data.state||state;state.tournamentDate=data.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=data.updated_at;render();document.getElementById('syncStatus').textContent='Updated from cloud'}
+async function signedIn(session){window.viewingHistory=false;document.getElementById('auth').classList.add('hidden');document.getElementById('app').style.display='block';document.getElementById('syncStatus').textContent='Loading cloud…';const {data,error}=await sb.from('poker_tournaments').select('id,tournament_date,state,updated_at').eq('status','active').order('updated_at',{ascending:false}).limit(1);if(error){document.getElementById('syncStatus').textContent='Cloud error';toast(error.message);return}if(data&&data.length){tournamentId=data[0].id;state=data[0].state||blankState();state.tournamentDate=data[0].tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';state.status='active';lastCloudUpdatedAt=data[0].updated_at;cache();if(normalizeTables())await saveCloud()}else{tournamentId=null;lastCloudUpdatedAt=null;state=blankState();state.status='completed';state.finalResults=[];cache()}await loadHistory();render();document.getElementById('syncStatus').textContent='Cloud connected';setupRealtime();clearInterval(pollTimer);pollTimer=setInterval(pollCloud,3000)}
+function setupRealtime(){if(!tournamentId)return;if(realtimeChannel)sb.removeChannel(realtimeChannel);realtimeChannel=sb.channel('poker-'+tournamentId).on('postgres_changes',{event:'UPDATE',schema:'public',table:'poker_tournaments',filter:'id=eq.'+tournamentId},payload=>{const row=payload.new;if(row.updated_at===lastCloudUpdatedAt)return;state=row.state||state;normalizeTables();state.tournamentDate=row.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=row.updated_at;render()}).subscribe()}
+async function pollCloud(){if(!tournamentId)return;const {data,error}=await sb.from('poker_tournaments').select('state,tournament_date,updated_at,status').eq('id',tournamentId).single();if(error||!data||data.status!=='active')return;if(lastCloudUpdatedAt&&new Date(data.updated_at)<=new Date(lastCloudUpdatedAt))return;state=data.state||state;normalizeTables();state.tournamentDate=data.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=data.updated_at;render();document.getElementById('syncStatus').textContent='Updated from cloud'}
 start();
 </script>
 </body>
