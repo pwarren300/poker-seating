@@ -9,12 +9,13 @@
 :root{--bg:#111827;--panel:#1f2937;--panel2:#273449;--text:#f9fafb;--muted:#9ca3af;--accent:#22c55e;--danger:#ef4444;--blue:#38bdf8}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:linear-gradient(135deg,#0b1220,#172033);color:var(--text);min-height:100vh}.wrap{max-width:1100px;margin:auto;padding:20px}h1{margin:0 0 6px;font-size:clamp(25px,5vw,38px)}.sub{color:var(--muted);margin:0 0 18px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;background:var(--panel);padding:14px;border-radius:14px;margin-bottom:16px}input,button{font:inherit}input{flex:1;min-width:180px;padding:12px 13px;border-radius:10px;border:1px solid #46546a;background:#111827;color:white;outline:none}input:focus{border-color:var(--accent)}button{border:0;border-radius:10px;padding:11px 14px;cursor:pointer;font-weight:700;color:#07110a;background:var(--accent)}button.secondary{background:#475569;color:white}button.danger{background:var(--danger);color:white}button.blue{background:var(--blue);color:#06202b}button:disabled{opacity:.45;cursor:not-allowed}.status{background:#172033;border:1px solid #334155;padding:12px 14px;border-radius:12px;margin-bottom:16px;color:#dbeafe}.tables{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}.table-card{background:var(--panel);border-radius:18px;padding:15px;box-shadow:0 8px 30px #0004}.table-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}.table-title{font-size:20px;font-weight:800}.count{color:var(--muted);font-size:13px}.remove{padding:7px 10px;font-size:12px}.seats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.seat{min-height:62px;background:var(--panel2);border:1px solid #3b4a60;border-radius:11px;padding:8px;display:flex;flex-direction:column;justify-content:center}.seat.fixed{border-color:#f59e0b;background:#3b2f18}.seat-num{color:var(--muted);font-size:11px;text-transform:uppercase}.player{font-weight:750;overflow-wrap:anywhere}.empty{color:#64748b;font-size:14px}.hint{margin-top:12px;color:var(--muted);font-size:12px;line-height:1.45}.players{margin-top:18px;background:var(--panel);border-radius:14px;padding:14px}.players h2{margin:0 0 8px;font-size:18px}.player-list{display:flex;flex-wrap:wrap;gap:7px}.pill{background:#334155;padding:7px 9px;border-radius:999px;font-size:13px}.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#020617;border:1px solid #475569;padding:11px 15px;border-radius:10px;display:none;z-index:30}.auth{position:fixed;inset:0;background:rgba(2,6,23,.96);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}.auth-card{width:min(430px,100%);background:var(--panel);border:1px solid #334155;border-radius:18px;padding:22px;box-shadow:0 20px 60px #0008}.auth-card h2{margin-top:0}.auth-card input{width:100%;margin-bottom:10px}.auth-card button{width:100%;margin-top:6px}.small{font-size:12px;color:var(--muted);line-height:1.4}.topline{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.sync{font-size:12px;color:#86efac}.hidden{display:none!important}.history-row{width:100%;background:#334155;border-radius:10px;padding:10px}.history-row strong{display:block;margin-bottom:4px}.history-row .results{color:#cbd5e1;font-size:13px;white-space:pre-line}.history-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.history-actions button{padding:6px 9px;font-size:12px}.history-title{font-size:14px;font-weight:800;color:#f8fafc}.history-meta{color:#cbd5e1;font-size:12px;margin-top:3px}
 .player-action-overlay{position:fixed;inset:0;background:#020617cc;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px}.player-action-card{background:var(--panel);border:1px solid #475569;border-radius:16px;padding:22px;width:min(400px,100%);box-shadow:0 20px 60px #0009}.player-action-card h2{margin:0 0 10px}.player-action-card p{color:#cbd5e1}.player-action-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.player-action-buttons button{flex:1;min-width:120px}
+.payment-summary{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 12px}.payment-total{border:1px solid #3b4a60;background:#172033;border-radius:10px;padding:9px 13px;font-weight:700}.payment-row{background:#273449;border-radius:10px;padding:8px 10px;display:flex;align-items:center;gap:9px;justify-content:space-between;flex-wrap:wrap;min-width:200px}.payment-row button{font-size:12px;padding:7px 10px}.payment-badge{display:inline-block;border-radius:999px;font-size:11px;font-weight:800;padding:3px 7px;white-space:nowrap}.payment-badge.paid{background:#14532d;color:#bbf7d0}.payment-badge.unpaid{background:#78350f;color:#fef3c7}.payment-person{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.payment-section-title{font-size:12px;font-weight:750;color:#cbd5e1;margin:12px 0 7px}
 </style>
 </head>
 <body>
 <div id="auth" class="auth"><div class="auth-card"><h2>♠ Poker Table Seating</h2><p class="small">Sign in to keep the tournament shared between your phone and laptop.</p><input id="email" type="email" placeholder="Email address" autocomplete="email"><input id="password" type="password" placeholder="Password" autocomplete="current-password"><button id="loginBtn" onclick="login()">Sign in</button><p id="authMsg" class="small"></p></div></div>
 <div class="wrap" id="app" style="display:none">
-  <div class="topline"><div><h1>♠ Poker Table Seating</h1><p class="sub">Up to 8 players per table • Paul W is fixed at Table 1, Seat 3 until the final 8.</p></div><div><span id="syncStatus" class="sync">Cloud connected</span><br><button class="secondary" style="margin-top:6px;padding:7px 10px;font-size:12px" onclick="logout()">Sign out</button></div></div>
+  <div class="topline"><div><h1>♠ Poker Table Seating</h1><p class="sub">Up to 8 players per table • Paul W: Table 1 Seat 3 · Matt W: Table 2 when open · Random seating until the final 8.</p></div><div><span id="syncStatus" class="sync">Cloud connected</span><br><button class="secondary" style="margin-top:6px;padding:7px 10px;font-size:12px" onclick="logout()">Sign out</button></div></div>
   <div class="toolbar">
     <label style="display:flex;align-items:center;gap:8px;color:#cbd5e1;font-size:13px">Tournament date <input id="tournamentDate" type="date" style="min-width:150px;flex:0 0 auto"></label>
     <input id="tournamentName" placeholder="Tournament name (optional)" autocomplete="off">
@@ -26,12 +27,14 @@
     <button class="blue hidden" id="newTournamentBtn" onclick="newTournament()">＋ New Tournament</button><button class="secondary hidden" id="backHistoryBtn" onclick="exitHistoryView()">← Back to current tournament</button>
   </div>
   <div id="status" class="status"></div>
+  <div id="movementNotice" class="status hidden" role="status"></div>
+  <div class="players" id="paymentsPanel" style="margin:0 0 16px"><h2>💷 Entry payments</h2><p class="small">Track who has paid their entry. This is a manual record — the app does not collect money.</p><div class="payment-summary" id="paymentSummary"></div><div id="paymentRows"></div></div>
   <div id="tables" class="tables"></div>
-  <div class="players"><h2>Finishing positions</h2><div id="finishList" class="player-list"></div><div class="hint">Click Finish when a player is knocked out. The app records the exact finishing position.</div></div>
+  <div class="players"><h2>Finishing positions</h2><div id="finishList" class="player-list"></div><div class="hint">Use Undo to restore an accidentally eliminated player, or Edit results to correct the order.</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="secondary" id="editResultsBtn" onclick="editResults()">✏️ Edit results</button><button class="secondary" id="restoreBackupBtn" onclick="restoreLastBackup()">↩ Restore last backup</button></div></div>
   <div class="players"><h2>Tournament history</h2><div id="historyList" class="player-list"></div></div>
   <div class="players"><h2>Players currently seated</h2><div id="playerList" class="player-list"></div></div>
 </div>
-<div id="playerActionOverlay" class="player-action-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="playerActionTitle" onclick="if(event.target===this)closePlayerActions()"><div class="player-action-card"><h2 id="playerActionTitle">Player options</h2><p id="playerActionName"></p><div class="player-action-buttons"><button id="playerFinishBtn" onclick="choosePlayerAction('finish')">🏁 Finish / Eliminate</button><button class="danger" onclick="choosePlayerAction('remove')">Remove player</button><button class="secondary" onclick="closePlayerActions()">Cancel</button></div><p class="small">Finish records their tournament position. Remove takes them out without recording a finishing position.</p></div></div>
+<div id="playerActionOverlay" class="player-action-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="playerActionTitle" onclick="if(event.target===this)closePlayerActions()"><div class="player-action-card"><h2 id="playerActionTitle">Player options</h2><p id="playerActionName"></p><div class="player-action-buttons"><button id="playerFinishBtn" onclick="choosePlayerAction('finish')">🏁 Finish / Eliminate</button><button class="blue" id="playerPaymentBtn" onclick="markSelectedPlayerPayment()">💷 Mark paid</button><button class="danger" onclick="choosePlayerAction('remove')">Remove player</button><button class="secondary" onclick="closePlayerActions()">Cancel</button></div><p class="small">Finish records their tournament position. Remove takes them out without recording a finishing position.</p></div></div>
 <div id="toast" class="toast"></div>
 <script>
 const SUPABASE_URL='https://edspbipscrzlxpkrhxlk.supabase.co';
@@ -45,151 +48,283 @@ let pollTimer=null;
 let realtimeChannel=null;
 
 function makeTable(num){return{number:num,seats:Array(MAX_SEATS).fill(null)}}
-function blankState(){return{tables:[makeTable(1)],players:{},finalTableStarted:false,tournamentDate:new Date().toISOString().slice(0,10),tournamentName:'',finishOrder:[],status:'active'}}
-function loadLocal(){try{const x=JSON.parse(localStorage.getItem('pokerSeatingV1'));if(x&&Array.isArray(x.tables)){x.finishOrder=Array.isArray(x.finishOrder)?x.finishOrder:[];x.status=x.status||'active';x.tournamentDate=x.tournamentDate||new Date().toISOString().slice(0,10);x.tournamentName=x.tournamentName||'';return x}}catch(e){}return blankState()}
+function blankState(){return{tables:[makeTable(1)],players:{},finalTableStarted:false,manualTableCount:1,eliminationRecords:[],resultBackups:[],changeLog:[],payments:{},tournamentDate:new Date().toISOString().slice(0,10),tournamentName:'',finishOrder:[],status:'active'}}
+function loadLocal(){try{const x=JSON.parse(localStorage.getItem('pokerSeatingV1'));if(x&&Array.isArray(x.tables)){x.finishOrder=Array.isArray(x.finishOrder)?x.finishOrder:[];x.status=x.status||'active';x.tournamentDate=x.tournamentDate||new Date().toISOString().slice(0,10);x.tournamentName=x.tournamentName||'';x.payments=x.payments||{};return x}}catch(e){}return blankState()}
 function cache(){localStorage.setItem('pokerSeatingV1',JSON.stringify(state))}
 function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.style.display='block';clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.style.display='none',2500)}
 function allSeats(){const a=[];state.tables.forEach(t=>t.seats.forEach((p,i)=>a.push({table:t.number,seat:i+1,player:p})));return a}
 function finalTableMode(){return !!state.finalTableStarted}
-function ensurePaul(){
-  // Never create Paul from thin air: he must be in the active player roster.
-  if(finalTableMode() || !Object.keys(state.players).some(n=>n.toLowerCase()==='paul w'))return;
-  const t1=state.tables.find(t=>t.number===1);if(!t1)return;
-  const current=allSeats().find(x=>x.player&&x.player.toLowerCase()==='paul w');
-  if(t1.seats[2]==='Paul W')return;
-  // Free the reserved seat before moving its occupant, so a full table cannot lose anyone.
-  const displaced=t1.seats[2];t1.seats[2]=null;
-  if(current){const t=state.tables.find(t=>t.number===current.table);t.seats[current.seat-1]=null;}
-  t1.seats[2]='Paul W';
-  if(displaced && displaced.toLowerCase()!=='paul w')placeRandomly(displaced);
+function shuffle(items){const a=items.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function roster(){return Object.keys(state.players||{})}
+function named(name){return roster().find(n=>n.toLowerCase()===name.toLowerCase())}
+function tournamentParticipants(){return [...new Set([...roster(),...(state.finishOrder||[]),...(state.finalResults||[]).map(x=>x.player)])]}
+function isPaid(name){const p=(state.payments||{})[name];return p===true||!!(p&&p.paid)}
+function paymentBadge(name){const b=document.createElement('span');b.className='payment-badge '+(isPaid(name)?'paid':'unpaid');b.textContent=isPaid(name)?'✓ PAID':'● UNPAID';return b}
+function paymentChipHtml(name){return '<span class="payment-badge '+(isPaid(name)?'paid':'unpaid')+'">'+(isPaid(name)?'✓ PAID':'● UNPAID')+'</span>'}
+function togglePayment(name){
+ if(!tournamentParticipants().includes(name))return toast('Player not found in this tournament.');
+ if(isPaid(name)&&!confirm('Change '+name+' back to UNPAID?'))return;
+ if(!tournamentId)return toast('Save or open a tournament first.');
+ const next=!isPaid(name);state.payments=state.payments||{};
+ state.payments[name]={paid:next,paidAt:next?new Date().toISOString():null};
+ logChange('entry payment',name+' marked '+(next?'paid':'unpaid'));
+ if(state.status==='completed'||window.viewingHistory)saveCompletedCorrection('Payment status saved to tournament history.');
+ else saveAndRender(name+' marked '+(next?'PAID':'UNPAID')+'.');
 }
-function placeRandomly(name){const free=[];state.tables.forEach(t=>t.seats.forEach((p,i)=>{if(!p&&!(!state.finalTableStarted&&t.number===1&&i===2&&state.players['Paul W']))free.push({t,i})}));if(!free.length)return false;const x=free[Math.floor(Math.random()*free.length)];x.t.seats[x.i]=name;return true}
-function collapseToFinalTable(){
-  if(Object.keys(state.players).length>8 || state.tables.length===1)return false;
-  const names=allSeats().filter(x=>x.player).map(x=>x.player);
-  state.tables=[makeTable(1)];
-  names.forEach((name,i)=>state.tables[0].seats[i]=name);
-  return true;
+function markSelectedPlayerPayment(){const name=selectedPlayerForAction;closePlayerActions();if(name)togglePayment(name)}
+function renderPaymentTracking(completed){
+ const panel=document.getElementById('paymentsPanel'),summary=document.getElementById('paymentSummary'),root=document.getElementById('paymentRows');
+ const names=tournamentParticipants(),tracked=Object.keys(state.payments||{}).length>0;
+ panel.classList.toggle('hidden',completed&&!tracked);
+ summary.innerHTML='';root.innerHTML='';if(completed&&!tracked)return;
+ if(!names.length){root.innerHTML='<span class="empty">Add a player to start tracking entry payments.</span>';return}
+ const paidNames=names.filter(isPaid).sort((a,b)=>a.localeCompare(b));
+ const unpaidNames=names.filter(n=>!isPaid(n)).sort((a,b)=>a.localeCompare(b));
+ for(const [label,value] of [['Paid',paidNames.length],['Unpaid',unpaidNames.length],['Total entered',names.length]]){
+  const item=document.createElement('div');item.className='payment-total';item.textContent=label+': '+value;summary.appendChild(item);
+ }
+ for(const [title,people] of [['Awaiting payment',unpaidNames],['Paid',paidNames]]){
+  if(!people.length)continue;
+  const heading=document.createElement('div');heading.className='payment-section-title';heading.textContent=title;root.appendChild(heading);
+  const group=document.createElement('div');group.className='player-list';
+  for(const name of people){
+   const line=document.createElement('div');line.className='payment-row';
+   const who=document.createElement('div');who.className='payment-person';
+   const n=document.createElement('strong');n.textContent=name;who.appendChild(n);who.appendChild(paymentBadge(name));
+   if(!state.players?.[name]&&!completed){const out=document.createElement('span');out.className='small';out.textContent='(finished)';who.appendChild(out)}
+   const btn=document.createElement('button');btn.className=isPaid(name)?'secondary':'';
+   btn.textContent=isPaid(name)?'Mark unpaid':'✓ Mark paid';btn.onclick=()=>togglePayment(name);
+   line.append(who,btn);group.appendChild(line);
+  }
+  root.appendChild(group);
+ }
+}
+function seatsFor(t,name){return shuffle(t.seats.map((p,i)=>!p&&!(t.number===1&&i===2&&!state.finalTableStarted&&name!=='Paul W'&&!!named('Paul W'))?i:-1).filter(i=>i>=0))}
+function placeOnTable(name,t){if(!t)return false;const free=seatsFor(t,name);if(!free.length)return false;t.seats[free[0]]=name;return true}
+function desiredTable(name){if(!state.finalTableStarted&&name.toLowerCase()==='paul w')return state.tables[0];if(!state.finalTableStarted&&name.toLowerCase()==='matt w'&&state.tables.length>1)return state.tables[1];return null}
+function reservedCounts(){return state.tables.map(t=>t.seats.filter(Boolean).length)}
+function placeRandomly(name){const forced=desiredTable(name);if(forced)return placeOnTable(name,forced);const counts=reservedCounts(),min=Math.min(...counts);const eligible=shuffle(state.tables.filter((t,i)=>counts[i]===min&&seatsFor(t,name).length));if(eligible.length)return placeOnTable(name,eligible[0]);const other=shuffle(state.tables.filter(t=>seatsFor(t,name).length));return other.length?placeOnTable(name,other[0]):false}
+function ensureReserved(){
+ if(state.finalTableStarted)return false;
+ let changed=false;
+ for(const [name,num,seat] of [['Paul W',1,2],['Matt W',2,null]]){
+  const actual=named(name),target=state.tables[num-1];if(!actual||!target)continue;
+  const current=allSeats().find(x=>x.player&&x.player.toLowerCase()===name.toLowerCase());
+  if(current&&current.table===num&&(seat===null||current.seat===seat+1))continue;
+  if(current)state.tables[current.table-1].seats[current.seat-1]=null;
+  if(seat!==null){const displaced=target.seats[seat];target.seats[seat]=actual;if(displaced&&displaced.toLowerCase()!==name.toLowerCase())placeRandomly(displaced)}
+  else if(!placeOnTable(actual,target)){if(current)state.tables[current.table-1].seats[current.seat-1]=actual;continue}
+  changed=true;
+ }
+ return changed;
+}
+function ensurePaul(){return ensureReserved()}
+// Record previous locations so the director can see precisely who needs to move.
+function snapshotSeats(){
+ const before={};for(const x of allSeats())if(x.player)before[x.player]={table:x.table,seat:x.seat};return before;
+}
+function recordSeatChanges(before,reason){
+ const moves=[];
+ for(const x of allSeats())if(x.player&&before[x.player]&&(before[x.player].table!==x.table||before[x.player].seat!==x.seat)){
+  moves.push({player:x.player,from:before[x.player],to:{table:x.table,seat:x.seat}});
+ }
+ state.lastSeatMoves={at:new Date().toISOString(),reason,moves};return moves;
+}
+function renderSeatChanges(completed){
+ const el=document.getElementById('movementNotice');if(!el)return;
+ const recent=state.lastSeatMoves;
+ el.classList.toggle('hidden',completed||!recent||!recent.moves||!recent.moves.length);
+ if(completed||!recent||!recent.moves||!recent.moves.length)return;
+ el.innerHTML='';
+ const title=document.createElement('strong');title.textContent='Latest seat changes — '+recent.reason;el.appendChild(title);
+ const when=document.createElement('div');when.className='small';when.textContent=new Date(recent.at).toLocaleTimeString();el.appendChild(when);
+ for(const m of recent.moves){const row=document.createElement('div');row.style.marginTop='5px';row.textContent=m.player+': Table '+m.from.table+', Seat '+m.from.seat+' → Table '+m.to.table+', Seat '+m.to.seat;el.appendChild(row)}
+}
+// Moving a single player from a crowded table to an underfilled table is the
+// only routine seating adjustment. Existing players never swap tables or seats.
+function rebalanceMinimumMoves(){
+ const moves=[];
+ for(let attempt=0;attempt<MAX_SEATS*state.tables.length*state.tables.length;attempt++){
+  const counts=reservedCounts(),min=Math.min(...counts),max=Math.max(...counts);
+  if(max-min<=1)break;
+  const donors=shuffle(state.tables.filter((t,i)=>counts[i]>=min+2)).sort((a,b)=>counts[b.number-1]-counts[a.number-1]);
+  const destinations=shuffle(state.tables.filter((t,i)=>counts[i]<max-1)).sort((a,b)=>counts[a.number-1]-counts[b.number-1]);
+  let move=null;
+  for(const to of destinations){
+   for(const from of donors){
+    if(from===to||counts[from.number-1]-counts[to.number-1]<=1)continue;
+    const candidates=shuffle(from.seats.map((p,i)=>({p,i})).filter(x=>x.p&&x.p.toLowerCase()!=='paul w'&&!(x.p.toLowerCase()==='matt w'&&state.tables.length>1)));
+    const free=seatsFor(to,'Other');
+    if(!candidates.length||!free.length)continue;
+    const picked=candidates[0],seat=free[0];
+    from.seats[picked.i]=null;to.seats[seat]=picked.p;
+    move={player:picked.p,from:{table:from.number,seat:picked.i+1},to:{table:to.number,seat:seat+1}};
+    break;
+   }
+   if(move)break;
+  }
+  if(!move)break; // A reserved-seat constraint makes further balancing impossible.
+  moves.push(move);
+ }
+ return moves;
+}
+// Unlike the earlier implementation this DOES NOT clear any existing seats.
+// A newly opened table is filled by the new arrival (when applicable), then
+// only as many existing players as necessary are moved into underfilled tables.
+function rebalance(preferredPlayer=null,preferredTable=null){
+ ensureReserved();
+ for(const name of roster()){
+  if(allSeats().some(x=>x.player===name))continue;
+  const forced=desiredTable(name);
+  if(forced){if(!placeOnTable(name,forced))throw Error('No seat for '+name+' on reserved table.');}
+  else if(!(name===preferredPlayer&&preferredTable&&placeOnTable(name,preferredTable))&&!placeRandomly(name))throw Error('Unable to seat '+name);
+ }
+ ensureReserved();
+ return rebalanceMinimumMoves();
 }
 function randomiseFinalEight(){
-  const names=Object.keys(state.players);
-  if(names.length!==8)return false;
-  state.finalTableStarted=true;
-  state.tables=[makeTable(1)];
-  for(let i=names.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[names[i],names[j]]=[names[j],names[i]]}
-  state.tables[0].seats=names.slice();return true;
+ if(roster().length!==8)return false;
+ state.finalTableStarted=true;state.manualTableCount=1;state.tables=[makeTable(1)];
+ state.tables[0].seats=shuffle(roster());return true;
+}
+function normalizeTables(){
+ state.players=state.players||{};state.finishOrder=state.finishOrder||[];state.eliminationRecords=state.eliminationRecords||[];
+ state.resultBackups=state.resultBackups||[];state.changeLog=state.changeLog||[];state.payments=state.payments||{};
+ if(!Array.isArray(state.tables)||!state.tables.length)state.tables=[makeTable(1)];
+ if(state.finalTableStarted===undefined)state.finalTableStarted=false;
+ if(!Number.isInteger(state.manualTableCount))state.manualTableCount=1;
+ let changed=false;
+ if(state.finalTableStarted&&roster().length>8)state.finalTableStarted=false;
+ const count=roster().length,required=Math.max(1,Math.ceil(count/8),state.finalTableStarted?1:state.manualTableCount);
+ if(state.finalTableStarted&&count<=8){if(state.tables.length!==1){state.tables=[makeTable(1)];state.tables[0].seats=shuffle(roster());return true}}
+ else while(state.tables.length<required){state.tables.push(makeTable(state.tables.length+1));changed=true}
+ state.tables.forEach((t,i)=>{t.number=i+1;t.seats=(Array.isArray(t.seats)?t.seats:[]).slice(0,8);while(t.seats.length<8)t.seats.push(null)});
+ const seen=new Set();
+ state.tables.forEach(t=>t.seats=t.seats.map(n=>{if(!n)return null;const actual=roster().find(r=>r.toLowerCase()===String(n).toLowerCase());if(!actual||seen.has(actual.toLowerCase())){changed=true;return null}seen.add(actual.toLowerCase());return actual}));
+ if(roster().some(n=>!seen.has(n.toLowerCase()))){rebalance();changed=true}
+ if(ensureReserved())changed=true;
+ if(rebalanceMinimumMoves().length)changed=true
+ return changed;
 }
 function addPlayer(){
- const input=document.getElementById('nameInput'),name=input.value.trim();if(!name)return;
- const canonical=name.toLowerCase()==='paul w'?'Paul W':name;
- if(Object.keys(state.players).some(k=>k.toLowerCase()===canonical.toLowerCase()))return toast('That player is already seated.');
- normalizeTables();const before=Object.keys(state.players).length;
- if(before<=8&&state.tables.length>1)collapseToFinalTable();
- state.players[canonical]=true;
- const total=Object.keys(state.players).length;
- if(total>8)state.finalTableStarted=false;
- const needed=Math.max(1,Math.ceil(total/MAX_SEATS));let opened=false;
- while(state.tables.length<needed){state.tables.push(makeTable(state.tables.length+1));opened=true}
- if(total===8 && !state.finalTableStarted){randomiseFinalEight();toast('Final eight — seats randomised.');}
- else if(opened){rebalance();toast('Table '+state.tables.length+' opened automatically — players balanced.');}
- else {
-   if(canonical==='Paul W' && !state.finalTableStarted){
-     const t1=state.tables.find(t=>t.number===1),displaced=t1.seats[2];
-     t1.seats[2]='Paul W';if(displaced)placeRandomly(displaced);
-   } else if(!placeRandomly(canonical)){
-     delete state.players[canonical];return toast('No empty seat available.');
-   }
-   ensurePaul();
- }
+ if(state.status==='completed'||window.viewingHistory)return;
+ const input=document.getElementById('nameInput'),raw=input.value.trim();if(!raw)return;
+ const canonical=['paul w','matt w'].includes(raw.toLowerCase())?raw.toLowerCase()==='paul w'?'Paul W':'Matt W':raw;
+ if(roster().some(n=>n.toLowerCase()===canonical.toLowerCase())||state.finishOrder.some(n=>n.toLowerCase()===canonical.toLowerCase()))return toast('That player is already in this tournament. Undo their elimination if needed.');
+ const before=snapshotSeats();
+ state.players[canonical]=true;state.payments=state.payments||{};if(!state.payments[canonical])state.payments[canonical]={paid:false,paidAt:null};
+ if(roster().length>8)state.finalTableStarted=false;
+ const needed=Math.max(1,Math.ceil(roster().length/8),state.manualTableCount||1);
+ let newTable=null;
+ while(state.tables.length<needed){newTable=makeTable(state.tables.length+1);state.tables.push(newTable)}
+ // Prefer the newly opened table for the late arrival; existing players retain
+ // their current seats unless one direct move is needed to balance the tables.
+ rebalance(canonical,newTable);
+ const changes=recordSeatChanges(before,newTable?'Table '+newTable.number+' opened':'New player registered');
+ if(newTable)toast('Table '+newTable.number+' opened — '+changes.length+' existing player'+(changes.length===1?'':'s')+' moved; all others kept their seats.');
+ else if(changes.length)toast(changes.length+' player'+(changes.length===1?'':'s')+' moved to balance the tables.');
  input.value='';saveAndRender();
 }
-function addTable(){const total=Object.keys(state.players).length;if(total<=8)return toast('Up to 8 players use one final table. Table 2 opens automatically for player 9.');state.tables.push(makeTable(state.tables.length+1));rebalance();saveAndRender('Tables rebalanced.')}
-function removeTable(){if(state.tables.length<=1)return toast('You must keep at least one table.');const total=Object.keys(state.players).length;if(total>(state.tables.length-1)*MAX_SEATS)return toast('Cannot remove this table — there are not enough seats.');state.tables.pop();state.tables.forEach((t,i)=>t.number=i+1);if(total<=8){collapseToFinalTable();if(total===8)randomiseFinalEight()}else{rebalance()}saveAndRender('Table removed and players rebalanced.')}
-function rebalance(){
- const names=Object.keys(state.players).filter(n=>n.toLowerCase()!=='paul w');
- state.tables.forEach(t=>t.seats=Array(MAX_SEATS).fill(null));
- const total=Object.keys(state.players).length;
- const tableCount=state.tables.length;
- const base=Math.floor(total/tableCount);
- const extra=total%tableCount;
- const targets=state.tables.map((t,i)=>base+(i<extra?1:0));
- if(Object.keys(state.players).some(n=>n.toLowerCase()==='paul w')){
-   state.tables[0].seats[2]='Paul W';
- }
- for(let i=names.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[names[i],names[j]]=[names[j],names[i]]}
- let index=0;
- for(let ti=0;ti<state.tables.length;ti++){
-   const t=state.tables[ti];
-   const target=targets[ti];
-   let occupied=t.seats.filter(Boolean).length;
-   for(let si=0;si<t.seats.length && occupied<target;si++){
-     if(!t.seats[si]){t.seats[si]=names[index++];occupied++;}
-   }
- }
+function addTable(){
+ if(state.tables.length>=20)return toast('Maximum 20 tables in this version.');
+ if(state.finalTableStarted)return toast('The final table has already started.');
+ const before=snapshotSeats();state.tables.push(makeTable(state.tables.length+1));state.manualTableCount=state.tables.length;
+ rebalance();const changes=recordSeatChanges(before,'Table '+state.tables.length+' opened');
+ saveAndRender('Table '+state.tables.length+' opened — '+changes.length+' player'+(changes.length===1?'':'s')+' moved; other seats unchanged.');
 }
-
-function normalizeTables(){
-  const roster=Object.keys(state.players||{});
-  const total=roster.length;
-  const needed=Math.max(1,Math.ceil(total/MAX_SEATS));
-  if(!Array.isArray(state.tables)||!state.tables.length)state.tables=[makeTable(1)];
-  // Older saves have no finalTableStarted flag. A multi-table tournament that
-  // has reached eight players is already at the final table.
-  if(state.finalTableStarted===undefined)state.finalTableStarted=false;
-  if(total===8 && !state.finalTableStarted)return randomiseFinalEight();
-  let changed=false;
-  if(total<=8 && state.tables.length>1){
-    const seated=allSeats().filter(x=>x.player).map(x=>x.player);
-    state.tables=[makeTable(1)];seated.slice(0,8).forEach((n,i)=>state.tables[0].seats[i]=n);
-    changed=true;
-  }
-  while(state.tables.length<needed){state.tables.push(makeTable(state.tables.length+1));changed=true}
-  if(state.tables.length>needed){state.tables=state.tables.slice(0,needed);changed=true}
-  state.tables.forEach((t,i)=>{t.number=i+1;t.seats=(Array.isArray(t.seats)?t.seats:[]).slice(0,8);while(t.seats.length<8)t.seats.push(null)});
-  const seen=new Set();
-  state.tables.forEach(t=>t.seats=t.seats.map(n=>{
-    if(!n)return null;
-    const canonical=roster.find(r=>r.toLowerCase()===String(n).toLowerCase());
-    if(!canonical||seen.has(canonical.toLowerCase())){changed=true;return null}
-    seen.add(canonical.toLowerCase());return canonical;
-  }));
-  for(const name of roster){if(!seen.has(name.toLowerCase())){
-    // Repair invisible players (including Paul W) left in the roster by old versions.
-    if(!placeRandomly(name))rebalance();changed=true;
-  }}
-  if(!state.finalTableStarted && roster.some(n=>n.toLowerCase()==='paul w')){
-    const before=allSeats().find(x=>x.player==='Paul W');
-    ensurePaul();const after=allSeats().find(x=>x.player==='Paul W');
-    if(!before||!after||before.table!==after.table||before.seat!==after.seat)changed=true;
-  }
-  if(total>8){
-    const counts=state.tables.map(t=>t.seats.filter(Boolean).length);
-    if(Math.max(...counts)-Math.min(...counts)>1){rebalance();changed=true}
-  }
-  return changed;
+function removeSpecificTable(num){
+ if(state.tables.length<=1)return toast('You must keep at least one table.');
+ if(roster().length>(state.tables.length-1)*8)return toast('Not enough seats to close this table.');
+ if(!confirm('Close Table '+num+'? Only players from this table and any required reserved-seat moves will be relocated.'))return;
+ const before=snapshotSeats();state.tables.splice(num-1,1);state.tables.forEach((t,i)=>t.number=i+1);
+ state.manualTableCount=Math.min(state.manualTableCount||1,state.tables.length);
+ rebalance();const changes=recordSeatChanges(before,'Table '+num+' closed');
+ saveAndRender('Table closed — '+changes.length+' seat assignment'+(changes.length===1?'':'s')+' changed.');
 }
-
+function removeTable(){removeSpecificTable(state.tables.length)}
+function rebalanceOnePlayer(){return rebalanceMinimumMoves()}
+function backupResults(reason){
+ state.resultBackups=state.resultBackups||[];
+ const snap={at:new Date().toISOString(),reason,players:structuredClone(state.players),tables:structuredClone(state.tables),finishOrder:[...state.finishOrder],finalResults:structuredClone(state.finalResults||[]),finalTableStarted:!!state.finalTableStarted,manualTableCount:state.manualTableCount||1,eliminationRecords:structuredClone(state.eliminationRecords||[]),status:state.status};
+ state.resultBackups.push(snap);if(state.resultBackups.length>25)state.resultBackups.shift();return snap;
+}
+function logChange(action,details){state.changeLog=state.changeLog||[];state.changeLog.push({at:new Date().toISOString(),action,details});if(state.changeLog.length>100)state.changeLog.shift()}
+function finishPlayer(name){
+ if(!state.players[name]||state.finishOrder.includes(name))return;
+ const pos=roster().length;
+ if(!confirm('Eliminate '+name+' and record '+ordinal(pos)+' place?'+(pos===1?'\nThis will record the tournament winner.':'')))return;
+ const before=snapshotSeats(),previous=allSeats().find(x=>x.player===name);backupResults('Before eliminating '+name);
+ state.eliminationRecords=state.eliminationRecords||[];state.eliminationRecords.push({name,table:previous?.table,seat:previous?.seat,at:new Date().toISOString()});
+ state.finishOrder.push(name);state.tables.forEach(t=>t.seats=t.seats.map(p=>p===name?null:p));delete state.players[name];
+ if(roster().length===8&&state.tables.length>1){randomiseFinalEight();toast('Final 8 — all players, including Paul and Matt, randomly reseated.');}
+ else if(roster().length>8){rebalanceOnePlayer();toast(name+' finished '+ordinal(pos)+'.');}
+ else toast(name+' finished '+ordinal(pos)+'.');
+ recordSeatChanges(before,'After '+name+' was eliminated');logChange('elimination',name+' — '+ordinal(pos));saveAndRender();
+}
+function removePlayer(name){
+ if(!state.players[name])return;
+ const before=snapshotSeats();backupResults('Before removing '+name);state.tables.forEach(t=>t.seats=t.seats.map(p=>p===name?null:p));delete state.players[name];
+ if(roster().length===8&&state.tables.length>1)randomiseFinalEight();else if(roster().length>8)rebalanceOnePlayer();
+ recordSeatChanges(before,'After '+name+' was removed');logChange('remove',name);saveAndRender(name+' removed without finishing position.');
+}
+function undoElimination(name){
+ if(state.status==='completed'||window.viewingHistory)return toast('Use Edit results to correct completed tournaments.');
+ if(!state.finishOrder.includes(name))return toast('No recorded elimination for '+name+'.');
+ if(!confirm('Restore '+name+' to the tournament and remove their finishing position?'))return;
+ backupResults('Before undoing '+name);state.finishOrder=state.finishOrder.filter(n=>n!==name);state.players[name]=true;
+ const record=(state.eliminationRecords||[]).filter(x=>x.name===name).at(-1);
+ state.eliminationRecords=(state.eliminationRecords||[]).filter(x=>x.name!==name);
+ const wasFinal=state.finalTableStarted;
+ if(roster().length>8&&wasFinal){state.finalTableStarted=false;while(state.tables.length<Math.max(2,Math.ceil(roster().length/8),state.manualTableCount||1))state.tables.push(makeTable(state.tables.length+1));rebalance()}
+ else {
+  const preferred=record&&state.tables.find(t=>t.number===record.table);
+  if(!(preferred&&preferred.seats[record.seat-1]===null&&!(preferred.number===1&&record.seat===3&&name.toLowerCase()!=='paul w'&&!state.finalTableStarted)&&(preferred.seats[record.seat-1]=name))&&!placeRandomly(name))rebalance();
+  ensureReserved();
+ }
+ logChange('undo elimination',name);saveAndRender(name+' restored.');
+}
+function moveResult(items,index,newPosition){const next=items.slice();const [item]=next.splice(index,1);next.splice(newPosition-1,0,item);return next}
+function editResults(){
+ const completed=state.status==='completed'||window.viewingHistory;
+ const active=roster().length;
+ const current=completed?(state.finalResults||[]).slice().sort((a,b)=>a.position-b.position).map(x=>x.player):state.finishOrder.slice().reverse();
+ if(!current.length)return toast('No finishing positions to edit yet.');
+ const first=completed?1:active+1;
+ const numbered=current.map((n,i)=>ordinal(first+i)+' — '+n).join('\n');
+ const selected=prompt('RESULTS EDITOR\n\n'+numbered+'\n\nEnter the current finishing position to move.');
+ if(selected===null)return;const oldPos=Number(selected);if(!Number.isInteger(oldPos)||oldPos<first||oldPos>=first+current.length)return toast('Invalid position.');
+ const destination=prompt('Move '+current[oldPos-first]+' to which finishing position?',String(oldPos));
+ if(destination===null)return;const newPos=Number(destination);if(!Number.isInteger(newPos)||newPos<first||newPos>=first+current.length)return toast('Invalid new position.');
+ if(oldPos===newPos)return;
+ const reordered=moveResult(current,oldPos-first,newPos-first+1);
+ if(!confirm('Save corrected results?\n\n'+reordered.map((n,i)=>ordinal(first+i)+' — '+n).join('\n')))return;
+ backupResults('Before editing results');
+ if(completed)state.finalResults=reordered.map((player,i)=>({position:i+1,player}));
+ else state.finishOrder=reordered.reverse();
+ logChange('results correction',current[oldPos-first]+' moved from '+oldPos+' to '+newPos);
+ if(completed)saveCompletedCorrection();else saveAndRender('Finishing positions updated.');
+}
+async function saveCompletedCorrection(successMessage='Corrected results saved to history.'){
+ const rowId=tournamentId;if(!rowId)return toast('No tournament selected.');
+ const now=new Date().toISOString();const {data,error}=await sb.from('poker_tournaments').update({state,updated_at:now}).eq('id',rowId).select().single();
+ if(error){toast('Cloud save failed: '+error.message);return}
+ const hist=(window.historyRows||[]).find(r=>r.id===rowId);if(hist)hist.state=data.state;
+ lastCloudUpdatedAt=data.updated_at;cache();render();toast(successMessage);
+}
+async function restoreLastBackup(){
+ const b=(state.resultBackups||[]).at(-1);if(!b)return toast('No results backup available.');
+ if((state.status==='completed'||window.viewingHistory)&&b.status!=='completed')return toast('This backup is from before the tournament ended. Use Edit results for completed tournaments.');
+ if(!confirm('Restore the backup from '+new Date(b.at).toLocaleString()+'?\n'+b.reason+'\nThis replaces subsequent changes to this tournament.'))return;
+ state.resultBackups.pop();for(const key of ['players','tables','finishOrder','finalResults','finalTableStarted','manualTableCount','eliminationRecords','status'])state[key]=structuredClone(b[key]);
+ logChange('restore backup',b.reason);
+ if(state.status==='completed'||window.viewingHistory)await saveCompletedCorrection();else await saveAndRender('Backup restored.');
+}
 function ordinal(n){if(n%100>=11&&n%100<=13)return n+'th';return n+({1:'st',2:'nd',3:'rd'}[n%10]||'th')}
-function rebalanceOnePlayer(){const active=allSeats().filter(x=>x.player);if(active.length<=8)return;const counts=state.tables.map(t=>t.seats.filter(Boolean).length),max=Math.max(...counts),min=Math.min(...counts);if(max-min<=1)return;const froms=state.tables.filter((t,i)=>counts[i]===max),tos=state.tables.filter((t,i)=>counts[i]===min),from=froms[Math.floor(Math.random()*froms.length)],to=tos[Math.floor(Math.random()*tos.length)];const candidates=from.seats.map((p,i)=>({p,i})).filter(x=>x.p&&!(from.number===1&&x.i===2));const free=to.seats.map((p,i)=>!p&&!(to.number===1&&i===2)?i:-1).filter(i=>i>=0);if(!candidates.length||!free.length)return;const picked=candidates[Math.floor(Math.random()*candidates.length)],seat=free[Math.floor(Math.random()*free.length)];from.seats[picked.i]=null;to.seats[seat]=picked.p}
 let selectedPlayerForAction=null;
-function openPlayerActions(name){
- if(state.status==='completed'||window.viewingHistory||!state.players[name])return;
- selectedPlayerForAction=name;
- document.getElementById('playerActionName').textContent=name;
- document.getElementById('playerActionOverlay').classList.remove('hidden');
- document.getElementById('playerFinishBtn').disabled=false;
-}
+function openPlayerActions(name){if(state.status==='completed'||window.viewingHistory||!state.players[name])return;selectedPlayerForAction=name;document.getElementById('playerActionName').textContent=name;document.getElementById('playerActionOverlay').classList.remove('hidden');document.getElementById('playerFinishBtn').disabled=false;document.getElementById('playerPaymentBtn').textContent=isPaid(name)?'↩ Mark unpaid':'💷 Mark paid'}
 function closePlayerActions(){selectedPlayerForAction=null;document.getElementById('playerActionOverlay').classList.add('hidden')}
-function choosePlayerAction(action){
- const name=selectedPlayerForAction;
- closePlayerActions();
- if(!name||!state.players[name])return;
- if(action==='finish')finishPlayer(name);
- else if(action==='remove'&&confirm('Remove '+name+' without recording a finishing position?'))removePlayer(name);
-}
+function choosePlayerAction(action){const name=selectedPlayerForAction;closePlayerActions();if(!name||!state.players[name])return;if(action==='finish')finishPlayer(name);else if(action==='remove'&&confirm('Remove '+name+' without recording a finishing position?'))removePlayer(name)}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closePlayerActions()});
-function finishPlayer(name){if(!state.players[name]||state.finishOrder.includes(name))return;const pos=Object.keys(state.players).length;state.finishOrder.push(name);state.tables.forEach(t=>t.seats=t.seats.map(p=>p===name?null:p));delete state.players[name];const remaining=Object.keys(state.players).length;if(remaining===8){randomiseFinalEight();toast('8 players left — final table randomised.')}else if(remaining<=8){if(state.tables.length>1)collapseToFinalTable();toast(name+' recorded as '+ordinal(pos)+'.')}else{rebalanceOnePlayer();toast(name+' recorded as '+ordinal(pos)+'. One player moved to balance the tables.')}saveAndRender()}
-function removePlayer(name){state.tables.forEach(t=>t.seats=t.seats.map(p=>p===name?null:p));delete state.players[name];const remaining=Object.keys(state.players).length;if(remaining===8)randomiseFinalEight();else if(remaining<=8){if(state.tables.length>1)collapseToFinalTable()}else rebalanceOnePlayer();saveAndRender(name+' removed.')}
 async function endTournament(){
  if(state.status==='completed')return toast('This tournament has already ended.');
  const seated=allSeats().filter(x=>x.player);
@@ -203,7 +338,9 @@ async function endTournament(){
    // The final player was already marked Finish. Their recorded position is 1st.
    state.finishOrder.slice().reverse().forEach((p,i)=>positions.push({position:i+1,player:p}));
  }
- const endedAt=new Date().toISOString();
+   if(!confirm('Confirm FINAL RESULTS before ending the tournament:\n\n'+positions.map(x=>ordinal(x.position)+' — '+x.player).join('\n')+'\n\nYou can still edit these later in History.'))return;
+  backupResults('Before ending tournament');
+  const endedAt=new Date().toISOString();
  const resultState={...state,status:'completed',finalResults:positions,endedAt,players:{},tables:[makeTable(1)]};
  if(!tournamentId)return toast('Tournament has not been saved to the cloud.');
  const {data,error}=await sb.from('poker_tournaments').update({status:'completed',state:resultState,ended_at:endedAt,updated_at:endedAt}).eq('id',tournamentId).select().single();
@@ -223,9 +360,8 @@ async function deleteAllHistory(){const rows=window.historyRows||[];if(!rows.len
 async function openHistoryTournament(row){if(realtimeChannel){await sb.removeChannel(realtimeChannel);realtimeChannel=null}clearInterval(pollTimer);window.viewingHistory=true;state=row.state||blankState();state.status='completed';state.tournamentDate=row.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';tournamentId=row.id;document.getElementById('backHistoryBtn').classList.remove('hidden');document.getElementById('newTournamentBtn').classList.remove('hidden');render();window.scrollTo({top:0,behavior:'smooth'});toast('Viewing completed tournament from '+state.tournamentDate+'.')}
 async function exitHistoryView(){window.viewingHistory=false;const {data,error}=await sb.from('poker_tournaments').select('id,tournament_date,state,updated_at').eq('status','active').order('updated_at',{ascending:false}).limit(1);if(error){toast('Could not load current tournament.');return}if(data&&data.length){tournamentId=data[0].id;state=data[0].state||blankState();state.status='active';state.tournamentDate=data[0].tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=data[0].updated_at;if(normalizeTables())await saveCloud()}else{tournamentId=null;lastCloudUpdatedAt=null;state=blankState();state.status='completed';state.finalResults=[]}document.getElementById('backHistoryBtn').classList.add('hidden');document.getElementById('newTournamentBtn').classList.toggle('hidden',state.status!=='completed');render();if(tournamentId){setupRealtime();clearInterval(pollTimer);pollTimer=setInterval(pollCloud,3000)}}
 
-function render(){const completed=state.status==='completed'||window.viewingHistory;const activeCount=Object.keys(state.players||{}).length;document.getElementById('tournamentDate').value=state.tournamentDate;document.getElementById('tournamentName').value=state.tournamentName||'';document.getElementById('newTournamentBtn').classList.toggle('hidden',!completed||!!window.viewingHistory&&activeCount>0);document.getElementById('backHistoryBtn').classList.toggle('hidden',!window.viewingHistory);if(completed){const hasResults=(state.finalResults||[]).length>0;document.getElementById('status').innerHTML=hasResults?'<b>🏆 Tournament ended</b> · '+state.tournamentDate+'<br><span style="color:#cbd5e1">Results are saved in Tournament History.</span>':'<b>♠ No active tournament</b><br><span style="color:#cbd5e1">Start a new tournament when you are ready.</span>';document.getElementById('tables').innerHTML=hasResults?'<div class="players" style="margin-top:0"><h2>🏆 Final result</h2><div class="player-list">'+(state.finalResults||[]).map(x=>'<span class="pill">'+ordinal(x.position)+' — '+x.player+'</span>').join('')+'</div></div>':'<div class="players" style="margin-top:0"><h2>Ready for the next game?</h2><div class="small">Your completed tournaments are safely stored in Tournament History below.</div></div>';document.getElementById('tournamentName').disabled=true;document.getElementById('tournamentDate').disabled=true;document.getElementById('nameInput').disabled=true;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=true;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=true}else{ensurePaul();document.getElementById('tournamentName').disabled=false;document.getElementById('tournamentDate').disabled=false;document.getElementById('nameInput').disabled=false;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=false;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=false;const total=allSeats().filter(x=>x.player).length,tables=state.tables.length,finalMode=!!state.finalTableStarted;document.getElementById('status').innerHTML='<b>'+total+'</b> player'+(total===1?'':'s')+' seated across <b>'+tables+'</b> table'+(tables===1?'':'s')+' · '+(total===0?'<b>All players finished — ready to end tournament.</b>':finalMode?'<b>FINAL TABLE — players are random.</b>':'Ideal balance: '+Math.floor(total/tables)+'–'+Math.ceil(total/tables)+' players per table.');const root=document.getElementById('tables');root.innerHTML='';state.tables.forEach(t=>{const card=document.createElement('div');card.className='table-card';const occupied=t.seats.filter(Boolean).length;card.innerHTML='<div class="table-head"><div><div class="table-title">Table '+t.number+'</div><div class="count">'+occupied+'/8 seats</div></div><button class="danger remove" onclick="removeSpecificTable('+t.number+')" '+(tables===1?'disabled':'')+'>Remove</button></div>';const seats=document.createElement('div');seats.className='seats';t.seats.forEach((p,i)=>{const ss=document.createElement('div');ss.className='seat'+(t.number===1&&i===2&&!finalMode?' fixed':'');ss.innerHTML='<div class="seat-num">Seat '+(i+1)+(t.number===1&&i===2&&!finalMode?' · FIXED':'')+'</div><div class="'+(p?'player':'empty')+'">'+(p||'Empty')+'</div>';if(p){ss.style.cursor='pointer';ss.title='Double-click for player options';ss.ondblclick=()=>openPlayerActions(p)};seats.appendChild(ss)});card.appendChild(seats);const hint=document.createElement('div');hint.className='hint';hint.textContent='New players get a random empty seat. Adding/removing tables rebalances everyone. During eliminations only one player moves when needed. At exactly 8 players the final table is completely random; below 8, players stay where they are.';card.appendChild(hint);root.appendChild(card)})}const list=document.getElementById('playerList');list.innerHTML='';if(completed){list.innerHTML='<span class="empty">No active players — tournament has ended.</span>'}else{const names=allSeats().filter(x=>x.player).sort((a,b)=>a.player.localeCompare(b.player));if(!names.length)list.innerHTML='<span class="empty">No players yet.</span>';names.forEach(x=>{const p=document.createElement('span');p.className='pill';p.style.display='inline-flex';p.style.alignItems='center';p.style.gap='8px';const label=document.createElement('span');label.textContent=x.player+' · T'+x.table+' S'+x.seat;p.appendChild(label);label.title='Double-click for player options';label.style.cursor='pointer';label.ondblclick=()=>openPlayerActions(x.player);const btn=document.createElement('button');btn.textContent='Finish';btn.style.padding='5px 8px';btn.style.fontSize='11px';btn.onclick=()=>finishPlayer(x.player);p.appendChild(btn);list.appendChild(p)})}const fl=document.getElementById('finishList');fl.innerHTML='';if(completed){(state.finalResults||[]).forEach(x=>{const p=document.createElement('span');p.className='pill';p.textContent=ordinal(x.position)+' — '+x.player;fl.appendChild(p)})}else{if(!state.finishOrder.length)fl.innerHTML='<span class="empty">No finishing positions recorded yet.</span>';else state.finishOrder.slice().reverse().forEach((n,i)=>{const pp=document.createElement('span');pp.className='pill';pp.textContent=ordinal(i+(Object.keys(state.players).length===0?1:2))+' — '+n;fl.appendChild(pp)});if(Object.keys(state.players).length===1){const winner=Object.keys(state.players)[0],pp=document.createElement('span');pp.className='pill';pp.textContent='1st — '+winner;fl.prepend(pp)}}renderHistory();cache()}
+function render(){const completed=state.status==='completed'||window.viewingHistory;const activeCount=Object.keys(state.players||{}).length;document.getElementById('tournamentDate').value=state.tournamentDate;document.getElementById('tournamentName').value=state.tournamentName||'';document.getElementById('newTournamentBtn').classList.toggle('hidden',!completed||!!window.viewingHistory&&activeCount>0);document.getElementById('backHistoryBtn').classList.toggle('hidden',!window.viewingHistory);if(completed){const hasResults=(state.finalResults||[]).length>0;document.getElementById('status').innerHTML=hasResults?'<b>🏆 Tournament ended</b> · '+state.tournamentDate+'<br><span style="color:#cbd5e1">Results are saved in Tournament History.</span>':'<b>♠ No active tournament</b><br><span style="color:#cbd5e1">Start a new tournament when you are ready.</span>';document.getElementById('tables').innerHTML=hasResults?'<div class="players" style="margin-top:0"><h2>🏆 Final result</h2><div class="player-list">'+(state.finalResults||[]).map(x=>'<span class="pill">'+ordinal(x.position)+' — '+escapeHtml(x.player)+'</span>').join('')+'</div></div>':'<div class="players" style="margin-top:0"><h2>Ready for the next game?</h2><div class="small">Your completed tournaments are safely stored in Tournament History below.</div></div>';document.getElementById('tournamentName').disabled=true;document.getElementById('tournamentDate').disabled=true;document.getElementById('nameInput').disabled=true;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=true;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=true}else{ensurePaul();document.getElementById('tournamentName').disabled=false;document.getElementById('tournamentDate').disabled=false;document.getElementById('nameInput').disabled=false;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=false;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=false;const total=allSeats().filter(x=>x.player).length,tables=state.tables.length,finalMode=!!state.finalTableStarted;document.getElementById('status').innerHTML='<b>'+total+'</b> player'+(total===1?'':'s')+' seated across <b>'+tables+'</b> table'+(tables===1?'':'s')+' · '+(total===0?'<b>'+(state.finishOrder.length?'All players finished — review results and end tournament.':'Ready for players.')+'</b>':finalMode?'<b>FINAL TABLE — players are random.</b>':'Ideal balance: '+Math.floor(total/tables)+'–'+Math.ceil(total/tables)+' players per table.');const root=document.getElementById('tables');root.innerHTML='';state.tables.forEach(t=>{const card=document.createElement('div');card.className='table-card';const occupied=t.seats.filter(Boolean).length;card.innerHTML='<div class="table-head"><div><div class="table-title">Table '+t.number+'</div><div class="count">'+occupied+'/8 seats</div></div><button class="danger remove" onclick="removeSpecificTable('+t.number+')" '+(tables===1?'disabled':'')+'>Remove</button></div>';const seats=document.createElement('div');seats.className='seats';t.seats.forEach((p,i)=>{const ss=document.createElement('div');ss.className='seat'+(t.number===1&&i===2&&!finalMode?' fixed':'');ss.innerHTML='<div class="seat-num">Seat '+(i+1)+(t.number===1&&i===2&&!finalMode?' · FIXED':'')+'</div><div class="'+(p?'player':'empty')+'">'+escapeHtml(p||'Empty')+'</div>'+(p?paymentChipHtml(p):'');if(p){ss.style.cursor='pointer';ss.title='Double-click for player options';ss.ondblclick=()=>openPlayerActions(p)};seats.appendChild(ss)});card.appendChild(seats);const hint=document.createElement('div');hint.className='hint';hint.textContent='Late registrations and new tables move only the players needed for balance; everyone else keeps their existing seat. When the field drops to 8 players, the final table is randomly reseated. Pre-opened tables stay open.';card.appendChild(hint);root.appendChild(card)})}const list=document.getElementById('playerList');list.innerHTML='';if(completed){list.innerHTML='<span class="empty">No active players — tournament has ended.</span>'}else{const names=allSeats().filter(x=>x.player).sort((a,b)=>a.player.localeCompare(b.player));if(!names.length)list.innerHTML='<span class="empty">No players yet.</span>';names.forEach(x=>{const p=document.createElement('span');p.className='pill';p.style.display='inline-flex';p.style.alignItems='center';p.style.gap='8px';const label=document.createElement('span');label.textContent=x.player+' · T'+x.table+' S'+x.seat;p.appendChild(label);p.appendChild(paymentBadge(x.player));const paymentButton=document.createElement('button');paymentButton.className=isPaid(x.player)?'secondary':'';paymentButton.textContent=isPaid(x.player)?'Mark unpaid':'Mark paid';paymentButton.style.fontSize='11px';paymentButton.style.padding='5px 8px';paymentButton.onclick=()=>togglePayment(x.player);p.appendChild(paymentButton);label.title='Double-click for player options';label.style.cursor='pointer';label.ondblclick=()=>openPlayerActions(x.player);const btn=document.createElement('button');btn.textContent='Finish';btn.style.padding='5px 8px';btn.style.fontSize='11px';btn.onclick=()=>finishPlayer(x.player);p.appendChild(btn);list.appendChild(p)})}document.getElementById('editResultsBtn').disabled=false;document.getElementById('restoreBackupBtn').disabled=!(state.resultBackups||[]).length;const fl=document.getElementById('finishList');fl.innerHTML='';if(completed){(state.finalResults||[]).forEach(x=>{const p=document.createElement('span');p.className='pill';p.textContent=ordinal(x.position)+' — '+x.player;if(Object.keys(state.payments||{}).length)p.appendChild(paymentBadge(x.player));fl.appendChild(p)})}else{if(!state.finishOrder.length)fl.innerHTML='<span class="empty">No finishing positions recorded yet.</span>';else state.finishOrder.slice().reverse().forEach((n,i)=>{const pp=document.createElement('span');pp.className='pill';pp.textContent=ordinal(i+Object.keys(state.players).length+1)+' — '+n+' ';pp.appendChild(paymentBadge(n));const undo=document.createElement('button');undo.className='secondary';undo.style.padding='4px 7px';undo.style.fontSize='11px';undo.textContent='↩ Undo';undo.onclick=()=>undoElimination(n);pp.appendChild(undo);fl.appendChild(pp)});if(Object.keys(state.players).length===1){const winner=Object.keys(state.players)[0],pp=document.createElement('span');pp.className='pill';pp.textContent='1st — '+winner;pp.appendChild(paymentBadge(winner));fl.prepend(pp)}}renderHistory();renderPaymentTracking(completed);renderSeatChanges(completed);cache()}
 
-function removeSpecificTable(num){if(state.tables.length<=1)return;const total=Object.keys(state.players).length;if(total>(state.tables.length-1)*MAX_SEATS)return toast('Cannot remove this table — there are not enough seats.');const idx=state.tables.findIndex(t=>t.number===num);if(idx<0)return;state.tables.splice(idx,1);state.tables.forEach((t,i)=>t.number=i+1);if(total<=8){collapseToFinalTable();if(total===8)randomiseFinalEight()}else rebalance();saveAndRender('Table removed and players rebalanced.')}
 document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')addPlayer()});document.getElementById('tournamentDate').addEventListener('change',e=>{state.tournamentDate=e.target.value;saveAndRender()});document.getElementById('tournamentName').addEventListener('change',e=>{state.tournamentName=e.target.value.trim();saveAndRender()});
 async function login(){const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;const msg=document.getElementById('authMsg');if(!email||!password){msg.textContent='Enter your email and password.';return}document.getElementById('loginBtn').disabled=true;msg.textContent='Signing in…';const {error}=await sb.auth.signInWithPassword({email,password});document.getElementById('loginBtn').disabled=false;if(error){msg.textContent=error.message;return}msg.textContent=''}
 async function logout(){await sb.auth.signOut()}
