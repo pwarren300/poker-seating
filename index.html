@@ -81,7 +81,7 @@
    <div class="payout-card"><h2>⏱ Blind timer</h2><p class="small">Director controls. Changes are saved to the tournament and shared across signed-in devices.</p>
     <div id="blindLevelLabel" class="payout-meta">Level 1</div><div id="blindCountdown" style="font-size:clamp(44px,9vw,96px);font-weight:900;text-align:center;margin:18px">15:00</div><div id="blindNext" style="text-align:center;margin-bottom:16px"></div>
     <div class="toolbar"><button onclick="blindStart()">▶ Start / Resume</button><button class="secondary" onclick="blindPause()">⏸ Pause</button><button class="secondary" onclick="blindNextLevel()">⏭ Next level</button><button class="secondary" onclick="blindPreviousLevel()">⏮ Previous</button><button class="danger" onclick="blindReset()">↺ Reset timer</button></div>
-    <h3>Blind structure</h3><p class="small">Enter the small blind, big blind and duration in separate boxes. Tick Break to make that row a break instead.</p>
+    <h3>Blind structure</h3><div class="toolbar"><select id="savedBlindSelect" aria-label="Saved blind structures" style="flex:1;min-width:190px;padding:11px;background:#111827;color:white;border:1px solid #46546a;border-radius:10px"></select><button class="secondary" onclick="loadSelectedBlindStructure()">Load selected</button><button class="danger" onclick="deleteSelectedBlindStructure()">Delete saved</button></div><div class="toolbar"><input id="blindStructureName" placeholder="Name this structure (e.g. Wednesday Poker)" maxlength="80"><button onclick="saveNamedBlindStructure()">💾 Save named structure</button></div><p class="small">Enter the small blind, big blind and duration in separate boxes. Tick Break to make that row a break instead.</p>
     <div id="blindStructureRows" class="blind-editor"></div>
     <div class="toolbar"><button class="secondary" onclick="addBlindRow()">＋ Add level</button><button class="secondary" onclick="addBlindRow(true)">☕ Add break</button><button onclick="saveBlindStructure()">💾 Save blind structure</button></div><div id="blindStatus" class="small" role="status"></div>
    </div>
@@ -109,6 +109,7 @@ let payoutDraft=null;
 let payoutDraftTournamentId=null;
 const DEFAULT_BLINDS=[{sb:100,bb:200,minutes:15},{sb:200,bb:400,minutes:15},{sb:300,bb:600,minutes:15},{break:true,minutes:10},{sb:400,bb:800,minutes:15},{sb:600,bb:1200,minutes:15},{sb:1000,bb:2000,minutes:15}];
 let blindTickHandle=null;
+let savedBlindStructures=[];
 
 function makeTable(num){return{number:num,seats:Array(MAX_SEATS).fill(null)}}
 function blankState(){return{tables:[makeTable(1)],players:{},finalTableStarted:false,manualTableCount:1,eliminationRecords:[],resultBackups:[],changeLog:[],payments:{},payoutPlan:null,blindTimer:null,tournamentDate:new Date().toISOString().slice(0,10),tournamentName:'',finishOrder:[],status:'active'}}
@@ -381,7 +382,9 @@ async function endTournament(){
  if(error){console.error(error);return toast('Could not finish tournament: '+error.message)}
  state=resultState;lastCloudUpdatedAt=data.updated_at;cache();await loadHistory();render();toast('Tournament saved to history.');
 }
-async function newTournament(){payoutDraft=null;if(realtimeChannel){await sb.removeChannel(realtimeChannel);realtimeChannel=null}clearInterval(pollTimer);const d=new Date().toISOString().slice(0,10);state=blankState();state.tournamentDate=d;state.tournamentName='';state.players={};state.finishOrder=[];state.status='active';state.finalResults=[];tournamentId=null;lastCloudUpdatedAt=null;window.viewingHistory=false;document.getElementById('newTournamentBtn').classList.add('hidden');document.getElementById('backHistoryBtn').classList.add('hidden');await createActiveTournament();render();setupRealtime();pollTimer=setInterval(pollCloud,3000)}
+async function newTournament(){
+ const chosen=await chooseNewTournamentBlinds();if(!chosen)return;
+ payoutDraft=null;if(realtimeChannel){await sb.removeChannel(realtimeChannel);realtimeChannel=null}clearInterval(pollTimer);const d=new Date().toISOString().slice(0,10);state=blankState();state.blindTimer={levels:structuredClone(chosen.levels),structureName:chosen.name,index:0,remainingMs:chosen.levels[0].minutes*60000,runningSince:null};state.tournamentDate=d;state.tournamentName='';state.players={};state.finishOrder=[];state.status='active';state.finalResults=[];tournamentId=null;lastCloudUpdatedAt=null;window.viewingHistory=false;document.getElementById('newTournamentBtn').classList.add('hidden');document.getElementById('backHistoryBtn').classList.add('hidden');if(!await createActiveTournament()){toast('New tournament was not saved; please try again.');return}render();setupRealtime();pollTimer=setInterval(pollCloud,3000)}
 async function createActiveTournament(){const {data,error}=await sb.from('poker_tournaments').insert({tournament_date:state.tournamentDate,status:'active',state}).select().single();if(error){toast('Could not create tournament: '+error.message);return false}tournamentId=data.id;lastCloudUpdatedAt=data.updated_at;cache();return true}
 async function saveCloud(){if(!tournamentId)return;const now=new Date().toISOString();const {data,error}=await sb.from('poker_tournaments').update({tournament_date:state.tournamentDate,state,updated_at:now}).eq('id',tournamentId).select().single();if(error){console.error(error);document.getElementById('syncStatus').textContent='Cloud save error';return}lastCloudUpdatedAt=data.updated_at;document.getElementById('syncStatus').textContent='Cloud saved'}
 async function saveAndRender(msg){cache();render();if(msg)toast(msg);await saveCloud()}
@@ -643,7 +646,7 @@ function renderBlindTimer(updateEditor=false){
  document.getElementById('blindLevelLabel').textContent=(level.break?'Break':'Level '+(t.levels.slice(0,t.index+1).filter(l=>!l.break).length)+' · '+level.sb+' / '+level.bb)+(t.runningSince?' · RUNNING':' · PAUSED');
  document.getElementById('blindCountdown').textContent=formatBlindTime(blindRemaining(t));
  document.getElementById('blindNext').textContent=next?'Next: '+(next.break?'Break':next.sb+' / '+next.bb)+' ('+next.minutes+' min)':'Final level';
- if(updateEditor)renderBlindEditor(t.levels);
+ if(updateEditor){renderBlindEditor(t.levels);document.getElementById('blindStructureName').value=t.structureName||'';renderSavedBlindOptions()}
  if(currentPage==='display')renderSeatingDisplay();
 }
 async function blindStart(){if(state.status!=='active'||window.viewingHistory)return toast('Open an active tournament first.');const t=ensureBlindTimer();if(!t.runningSince){t.runningSince=new Date().toISOString();await saveAndRender('Blind timer started.')}}
@@ -658,8 +661,71 @@ async function saveBlindStructure(){if(state.status!=='active'||window.viewingHi
   if(check.checked)levels.push({break:true,minutes:duration});else{const small=Number(sb.value),big=Number(bb.value);if(!Number.isSafeInteger(small)||!Number.isSafeInteger(big)||small<1||big<small)return toast('Check the small and big blind amounts.');levels.push({sb:small,bb:big,minutes:duration})}
  }
  if(!levels.length||levels.length>100)return toast('Enter 1–100 levels.');if(!confirm('Save this blind structure and restart the timer at the first row?'))return;
- state.blindTimer={levels,index:0,remainingMs:levels[0].minutes*60000,runningSince:null};await saveAndRender('Blind structure saved.');renderBlindTimer(true);
+ state.blindTimer={levels,structureName:document.getElementById('blindStructureName').value.trim()||ensureBlindTimer().structureName||'Current structure',index:0,remainingMs:levels[0].minutes*60000,runningSince:null};await saveAndRender('Blind structure saved.');renderBlindTimer(true);
 }
+
+// Named structures are shared through a separate authenticated Supabase table.
+// Never put the library into a tournament state: it must survive a new tournament.
+function renderSavedBlindOptions(){
+ const select=document.getElementById('savedBlindSelect');if(!select)return;
+ const old=select.value;select.replaceChildren();
+ for(const item of savedBlindStructures){const option=document.createElement('option');option.value=item.id;option.textContent=item.name;select.appendChild(option)}
+ if(savedBlindStructures.some(x=>x.id===old))select.value=old;
+}
+async function fetchSavedBlindStructures(){
+ const {data,error}=await sb.from('poker_blind_structures').select('id,name,levels,updated_at').order('name');
+ if(error){document.getElementById('blindStatus').textContent='Saved structures unavailable. Run the supplied Supabase SQL setup: '+error.message;return false}
+ savedBlindStructures=(data||[]).filter(x=>Array.isArray(x.levels)&&x.levels.length);
+ renderSavedBlindOptions();return true;
+}
+function readBlindEditor(){
+ const rows=[...document.querySelectorAll('#blindStructureRows .blind-edit-row')],levels=[];
+ for(const row of rows){const {sb,bb,minutes,check}=row._blindFields,duration=Number(minutes.value);
+  if(!Number.isInteger(duration)||duration<1||duration>240)throw Error('Each level or break needs 1–240 minutes.');
+  if(check.checked)levels.push({break:true,minutes:duration});else{
+   const small=Number(sb.value),big=Number(bb.value);
+   if(!Number.isSafeInteger(small)||!Number.isSafeInteger(big)||small<1||big<small)throw Error('Check small and big blind amounts.');
+   levels.push({sb:small,bb:big,minutes:duration});
+  }
+ }
+ if(!levels.length||levels.length>100)throw Error('Enter 1–100 levels.');return levels;
+}
+async function saveNamedBlindStructure(){
+ const name=document.getElementById('blindStructureName').value.trim();if(!name)return toast('Enter a structure name.');
+ let levels;try{levels=readBlindEditor()}catch(e){return toast(e.message)}
+ const existing=savedBlindStructures.find(x=>x.name.toLowerCase()===name.toLowerCase());
+ if(existing&&!confirm('Replace saved structure "'+existing.name+'"? Existing tournaments will not change.'))return;
+ const {data,error}=existing
+  ?await sb.from('poker_blind_structures').update({name,levels,updated_at:new Date().toISOString()}).eq('id',existing.id).select().single()
+  :await sb.from('poker_blind_structures').insert({name,levels}).select().single();
+ if(error)return toast('Could not save named structure: '+error.message);
+ await fetchSavedBlindStructures();document.getElementById('savedBlindSelect').value=data.id;
+ document.getElementById('blindStatus').textContent='Saved "'+name+'" to the cloud. This does not restart the current timer.';
+}
+function loadSelectedBlindStructure(){
+ const item=savedBlindStructures.find(x=>x.id===document.getElementById('savedBlindSelect').value);if(!item)return toast('Choose a saved structure.');
+ if(!confirm('Load "'+item.name+'" into the editor? Unsaved edits will be replaced. The running timer will not change until you save the current structure.'))return;
+ renderBlindEditor(item.levels);document.getElementById('blindStructureName').value=item.name;
+ document.getElementById('blindStatus').textContent='Loaded "'+item.name+'" into the editor. Click Save blind structure to apply to this tournament.';
+}
+async function deleteSelectedBlindStructure(){
+ const item=savedBlindStructures.find(x=>x.id===document.getElementById('savedBlindSelect').value);if(!item)return;
+ if(!confirm('Permanently delete saved blind structure "'+item.name+'"? Current and past tournaments keep their own copies.'))return;
+ const {error}=await sb.from('poker_blind_structures').delete().eq('id',item.id);
+ if(error)return toast('Delete failed: '+error.message);await fetchSavedBlindStructures();toast('Saved structure deleted.');
+}
+async function chooseNewTournamentBlinds(){
+ const available=await fetchSavedBlindStructures();if(!available)return null;
+ const current=state.blindTimer?.levels?.length?state.blindTimer:{levels:structuredClone(DEFAULT_BLINDS),structureName:'Default structure'};
+ const choices=['0 — Use current structure ('+(current.structureName||'Current structure')+')',...savedBlindStructures.map((x,i)=>(i+1)+' — '+x.name)];
+ const selection=prompt('NEW TOURNAMENT — SELECT BLIND STRUCTURE\n\n'+choices.join('\n')+'\n\nEnter a number. Cancel keeps your existing tournament unchanged.','0');
+ if(selection===null)return null;
+ if(!/^(0|[1-9]\d*)$/.test(selection.trim())){toast('Invalid selection. No new tournament created.');return null}
+ const index=Number(selection.trim());if(index>savedBlindStructures.length){toast('Invalid selection. No new tournament created.');return null}
+ const chosen=index===0?{name:current.structureName||'Current structure',levels:current.levels}:savedBlindStructures[index-1];
+ return {name:chosen.name,levels:structuredClone(chosen.levels)};
+}
+
 // Advance at most one level per elapsed timer boundary, even if no device was open.
 // Save transitions to the cloud; do not write every second.
 let blindAdvanceBusy=false;
@@ -695,7 +761,7 @@ document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='
 async function login(){const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;const msg=document.getElementById('authMsg');if(!email||!password){msg.textContent='Enter your email and password.';return}document.getElementById('loginBtn').disabled=true;msg.textContent='Signing in…';const {error}=await sb.auth.signInWithPassword({email,password});document.getElementById('loginBtn').disabled=false;if(error){msg.textContent=error.message;return}msg.textContent=''}
 async function logout(){await sb.auth.signOut()}
 async function start(){const {data:{session}}=await sb.auth.getSession();if(session)await signedIn(session);sb.auth.onAuthStateChange(async(event,session)=>{if(session)await signedIn(session);else{document.getElementById('app').style.display='none';document.getElementById('auth').classList.remove('hidden')}})}
-async function signedIn(session){window.viewingHistory=false;payoutDraft=null;document.getElementById('auth').classList.add('hidden');document.getElementById('app').style.display='block';document.getElementById('syncStatus').textContent='Loading cloud…';const {data,error}=await sb.from('poker_tournaments').select('id,tournament_date,state,updated_at').eq('status','active').order('updated_at',{ascending:false}).limit(1);if(error){document.getElementById('syncStatus').textContent='Cloud error';toast(error.message);return}if(data&&data.length){tournamentId=data[0].id;state=data[0].state||blankState();state.tournamentDate=data[0].tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';state.status='active';lastCloudUpdatedAt=data[0].updated_at;cache();if(normalizeTables())await saveCloud()}else{tournamentId=null;lastCloudUpdatedAt=null;state=blankState();state.status='completed';state.finalResults=[];cache()}await loadHistory();render();document.getElementById('syncStatus').textContent='Cloud connected';setupRealtime();clearInterval(pollTimer);pollTimer=setInterval(pollCloud,3000)}
+async function signedIn(session){window.viewingHistory=false;payoutDraft=null;document.getElementById('auth').classList.add('hidden');document.getElementById('app').style.display='block';document.getElementById('syncStatus').textContent='Loading cloud…';const {data,error}=await sb.from('poker_tournaments').select('id,tournament_date,state,updated_at').eq('status','active').order('updated_at',{ascending:false}).limit(1);if(error){document.getElementById('syncStatus').textContent='Cloud error';toast(error.message);return}if(data&&data.length){tournamentId=data[0].id;state=data[0].state||blankState();state.tournamentDate=data[0].tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';state.status='active';lastCloudUpdatedAt=data[0].updated_at;cache();if(normalizeTables())await saveCloud()}else{tournamentId=null;lastCloudUpdatedAt=null;state=blankState();state.status='completed';state.finalResults=[];cache()}await loadHistory();await fetchSavedBlindStructures();render();document.getElementById('syncStatus').textContent='Cloud connected';setupRealtime();clearInterval(pollTimer);pollTimer=setInterval(pollCloud,3000)}
 function setupRealtime(){if(!tournamentId)return;if(realtimeChannel)sb.removeChannel(realtimeChannel);realtimeChannel=sb.channel('poker-'+tournamentId).on('postgres_changes',{event:'UPDATE',schema:'public',table:'poker_tournaments',filter:'id=eq.'+tournamentId},payload=>{const row=payload.new;if(row.updated_at===lastCloudUpdatedAt)return;state=row.state||state;normalizeTables();state.tournamentDate=row.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=row.updated_at;render()}).subscribe()}
 async function pollCloud(){if(!tournamentId)return;const {data,error}=await sb.from('poker_tournaments').select('state,tournament_date,updated_at,status').eq('id',tournamentId).single();if(error||!data||data.status!=='active')return;if(lastCloudUpdatedAt&&new Date(data.updated_at)<=new Date(lastCloudUpdatedAt))return;state=data.state||state;normalizeTables();state.tournamentDate=data.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=data.updated_at;render();document.getElementById('syncStatus').textContent='Updated from cloud'}
 start();
