@@ -16,6 +16,7 @@
 .payout-layout{display:grid;grid-template-columns:minmax(280px,1fr) minmax(300px,1.25fr);gap:16px}.payout-card{background:var(--panel);border:1px solid #334155;border-radius:16px;padding:18px;min-width:0}.payout-card h2{font-size:20px;margin:0 0 6px}.payout-card h3{font-size:16px;margin:16px 0 8px}.payout-field{margin:16px 0}.payout-field label,.payout-field>label{display:block;font-size:13px;font-weight:750;color:#e2e8f0;margin-bottom:7px}.payout-field input:not([type=checkbox]),.payout-field select{width:100%;min-width:0;padding:12px 13px;border-radius:10px;border:1px solid #46546a;background:#111827;color:white;font:inherit}.payout-inline{display:flex;align-items:center;gap:9px}.payout-inline input[type=checkbox]{width:17px;min-width:17px;height:17px;accent-color:#22c55e;flex:none}.payout-inline label{display:inline;margin:0;font-size:13px;color:#e2e8f0;cursor:pointer}.payout-percent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px}.payout-percent-grid label{display:block;font-size:12px;color:#cbd5e1;margin-bottom:5px}.payout-percent-grid input{width:100%;min-width:0;padding:10px;background:#111827;color:white;border:1px solid #46546a;border-radius:9px}.payout-actions{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0 8px}.payout-amount{font-size:clamp(24px,4vw,34px);font-weight:850;color:#86efac}.payout-preview{width:100%;border-collapse:collapse;margin-top:14px}.payout-preview th,.payout-preview td{text-align:left;padding:11px 8px;border-bottom:1px solid #405069}.payout-preview th{color:#cbd5e1;font-size:12px}.payout-preview td:last-child,.payout-preview th:last-child{text-align:right;font-variant-numeric:tabular-nums}.payout-preview tr:first-child td{color:#bbf7d0;font-weight:850}.payout-alert{padding:11px 13px;background:#3b2f18;border:1px solid #f59e0b;border-radius:10px;color:#fde68a;font-size:13px;line-height:1.5;margin-top:12px}.payout-ok{color:#86efac;font-size:13px}.payout-meta{font-size:13px;color:#cbd5e1;line-height:1.55}.payout-structure{border-collapse:collapse;width:100%;font-size:12px;margin-top:10px}.payout-structure th,.payout-structure td{padding:7px 5px;text-align:left;border-bottom:1px solid #405069}.payout-structure th{color:#cbd5e1}.payout-structure .chosen{color:#86efac;font-weight:800}.payout-legal{border-left:3px solid #64748b;padding:8px 12px;color:#cbd5e1;font-size:12px;line-height:1.5;margin-top:15px}
 @media(max-width:760px){.payout-layout{grid-template-columns:1fr}.payout-card{padding:14px}.page-nav button{flex:1}}
 @media print{body{background:#fff;color:#000}.auth,.topline .sync,.page-nav,.payout-actions,#tournamentPage,.payout-card.controls,.payout-legal,#payoutStatus,.toast{display:none!important}#app{display:block!important}.wrap{max-width:none;padding:0}#payoutPage{display:block!important}.payout-layout{display:block}.payout-card{background:#fff;color:#000;border:0;padding:0}.payout-amount{color:#000}.payout-preview th,.payout-preview td{color:#000!important;border-color:#bbb}}
+.blind-editor{display:grid;gap:10px;margin:15px 0}.blind-edit-row{display:grid;grid-template-columns:minmax(80px,1fr) minmax(80px,1fr) minmax(85px,1fr) auto auto;gap:9px;align-items:end;background:#172033;border:1px solid #405069;border-radius:12px;padding:12px}.blind-edit-row label{font-size:12px;color:#cbd5e1;display:flex;flex-direction:column;gap:6px}.blind-edit-row input[type=number]{width:100%;min-width:0}.blind-edit-row .break-check{display:flex;flex-direction:row;align-items:center;gap:6px;padding-bottom:13px}.blind-edit-row .break-check input{min-width:auto;flex:none;width:19px;height:19px}.blind-edit-row.is-break .blind-value{opacity:.4}.blind-edit-row button{padding:11px}.display-timer{background:#111827;border:1px solid #22c55e;border-radius:18px;padding:22px;text-align:center;margin:14px 0 22px}.display-level{font-size:clamp(22px,4vw,38px);font-weight:850;color:#86efac}.display-blinds{font-size:clamp(30px,6vw,58px);font-weight:850;margin:5px 0}.display-countdown{font-size:clamp(64px,13vw,128px);font-weight:900;font-variant-numeric:tabular-nums;line-height:1.2}.display-timer .small{margin-top:7px}@media(max-width:580px){.blind-edit-row{grid-template-columns:1fr 1fr 1fr}.blind-edit-row .break-check{grid-column:span 2;padding:8px 0}.blind-edit-row button{grid-column:3}}
 </style>
 </head>
 <body>
@@ -80,14 +81,14 @@
    <div class="payout-card"><h2>⏱ Blind timer</h2><p class="small">Director controls. Changes are saved to the tournament and shared across signed-in devices.</p>
     <div id="blindLevelLabel" class="payout-meta">Level 1</div><div id="blindCountdown" style="font-size:clamp(44px,9vw,96px);font-weight:900;text-align:center;margin:18px">15:00</div><div id="blindNext" style="text-align:center;margin-bottom:16px"></div>
     <div class="toolbar"><button onclick="blindStart()">▶ Start / Resume</button><button class="secondary" onclick="blindPause()">⏸ Pause</button><button class="secondary" onclick="blindNextLevel()">⏭ Next level</button><button class="secondary" onclick="blindPreviousLevel()">⏮ Previous</button><button class="danger" onclick="blindReset()">↺ Reset timer</button></div>
-    <h3>Blind structure</h3><p class="small">One level per line: small blind / big blind, minutes. For breaks, write BREAK, minutes. Example: 100/200,15</p>
-    <textarea id="blindStructureInput" rows="9" style="width:100%;box-sizing:border-box;background:#111827;color:white;border:1px solid #475569;border-radius:8px;padding:12px;font:16px monospace"></textarea>
-    <div class="toolbar"><button class="secondary" onclick="saveBlindStructure()">💾 Save blind structure</button></div><div id="blindStatus" class="small" role="status"></div>
+    <h3>Blind structure</h3><p class="small">Enter the small blind, big blind and duration in separate boxes. Tick Break to make that row a break instead.</p>
+    <div id="blindStructureRows" class="blind-editor"></div>
+    <div class="toolbar"><button class="secondary" onclick="addBlindRow()">＋ Add level</button><button class="secondary" onclick="addBlindRow(true)">☕ Add break</button><button onclick="saveBlindStructure()">💾 Save blind structure</button></div><div id="blindStatus" class="small" role="status"></div>
    </div>
   </section>
   <section id="displayPage" class="hidden" aria-label="Read-only seating display">
    <div class="payout-card"><h2>📺 Player seating display</h2><p class="small">Read-only view: no entry payments, results controls or director actions. This view currently requires signing in; do not share your director login with players.</p>
-    <div id="publicBlind" style="text-align:center;font-size:clamp(22px,5vw,42px);font-weight:800;margin:12px 0"></div><div id="publicSeats" class="tables"></div>
+    <div class="display-timer" aria-live="off"><div id="publicLevel" class="display-level">LEVEL 1</div><div id="publicBlind" class="display-blinds">100 / 200</div><div id="publicCountdown" class="display-countdown">15:00</div><div id="publicTimerStatus" class="small">Timer paused</div><div id="publicNext" class="small">Next level</div></div><div id="publicSeats" class="tables"></div>
    </div>
   </section>
 </div>
@@ -612,7 +613,12 @@ function renderSeatingDisplay(){
   card.appendChild(seats);root.appendChild(card);
  }
  const timer=ensureBlindTimer(),level=timer.levels[timer.index];
- document.getElementById('publicBlind').textContent=state.status==='completed'?'Tournament completed':state.status==='abandoned'?'Tournament abandoned':(level?(level.break?'BREAK':'Blinds: '+level.sb+' / '+level.bb)+' · '+formatBlindTime(blindRemaining(timer)):'No blind structure');
+ const finished=state.status!=='active',levelNumber=timer.levels.slice(0,timer.index+1).filter(l=>!l.break).length;
+ document.getElementById('publicLevel').textContent=finished?(state.status==='abandoned'?'TOURNAMENT ABANDONED':'TOURNAMENT ENDED'):(level.break?'BREAK':'LEVEL '+levelNumber);
+ document.getElementById('publicBlind').textContent=finished?'':(level.break?'☕ Break':level.sb+' / '+level.bb);
+ document.getElementById('publicCountdown').textContent=formatBlindTime(blindRemaining(timer));
+ document.getElementById('publicTimerStatus').textContent=finished?'Timer stopped':timer.runningSince?'● Timer running':'Ⅱ Timer paused';
+ const next=timer.levels[timer.index+1];document.getElementById('publicNext').textContent=next?'Next: '+(next.break?'Break':next.sb+' / '+next.bb)+' · '+next.minutes+' min':'Final level';
 }
 function ensureBlindTimer(){
  if(!state.blindTimer||!Array.isArray(state.blindTimer.levels)||!state.blindTimer.levels.length)state.blindTimer={levels:structuredClone(DEFAULT_BLINDS),index:0,remainingMs:DEFAULT_BLINDS[0].minutes*60000,runningSince:null};
@@ -620,13 +626,24 @@ function ensureBlindTimer(){
 }
 function blindRemaining(t){return Math.max(0,Math.round((t.remainingMs||0)-(t.runningSince?Date.now()-new Date(t.runningSince).getTime():0)))}
 function formatBlindTime(ms){const secs=Math.ceil(ms/1000);return String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0')}
-function blindStructureText(levels){return levels.map(l=>l.break?'BREAK,'+l.minutes:l.sb+'/'+l.bb+','+l.minutes).join('\n')}
+function renderBlindEditor(levels){
+ const root=document.getElementById('blindStructureRows');root.replaceChildren();levels.forEach((level,i)=>addBlindRow(!!level.break,level));
+}
+function addBlindRow(isBreak=false,values=null){
+ const root=document.getElementById('blindStructureRows'),row=document.createElement('div');row.className='blind-edit-row';
+ function field(label,value){const wrap=document.createElement('label');wrap.className='blind-value';wrap.textContent=label;const input=document.createElement('input');input.type='number';input.min='1';input.step='1';input.value=value;wrap.appendChild(input);row.appendChild(wrap);return input}
+ const sb=field('Small blind',values?.sb??100),bb=field('Big blind',values?.bb??200),minutes=field('Time (minutes)',values?.minutes??15);minutes.parentElement.classList.remove('blind-value');
+ const checkLabel=document.createElement('label');checkLabel.className='break-check';const check=document.createElement('input');check.type='checkbox';check.checked=!!isBreak;checkLabel.append(check,document.createTextNode('Break'));row.appendChild(checkLabel);
+ const remove=document.createElement('button');remove.className='danger';remove.type='button';remove.textContent='✕';remove.title='Remove row';remove.onclick=()=>row.remove();row.appendChild(remove);
+ function update(){row.classList.toggle('is-break',check.checked);sb.disabled=bb.disabled=check.checked;minutes.parentElement.firstChild.textContent=check.checked?'Break (minutes)':'Time (minutes)'}check.onchange=update;update();
+ row._blindFields={sb,bb,minutes,check};root.appendChild(row);
+}
 function renderBlindTimer(updateEditor=false){
  const t=ensureBlindTimer(),level=t.levels[t.index],next=t.levels[t.index+1];
  document.getElementById('blindLevelLabel').textContent=(level.break?'Break':'Level '+(t.levels.slice(0,t.index+1).filter(l=>!l.break).length)+' · '+level.sb+' / '+level.bb)+(t.runningSince?' · RUNNING':' · PAUSED');
  document.getElementById('blindCountdown').textContent=formatBlindTime(blindRemaining(t));
  document.getElementById('blindNext').textContent=next?'Next: '+(next.break?'Break':next.sb+' / '+next.bb)+' ('+next.minutes+' min)':'Final level';
- if(updateEditor)document.getElementById('blindStructureInput').value=blindStructureText(t.levels);
+ if(updateEditor)renderBlindEditor(t.levels);
  if(currentPage==='display')renderSeatingDisplay();
 }
 async function blindStart(){if(state.status!=='active'||window.viewingHistory)return toast('Open an active tournament first.');const t=ensureBlindTimer();if(!t.runningSince){t.runningSince=new Date().toISOString();await saveAndRender('Blind timer started.')}}
@@ -635,9 +652,12 @@ async function blindMove(direction){if(state.status!=='active'||window.viewingHi
 function blindNextLevel(){return blindMove(1)}function blindPreviousLevel(){return blindMove(-1)}
 async function blindReset(){if(!confirm('Reset the blind timer to Level 1?'))return;const t=ensureBlindTimer();t.index=0;t.remainingMs=t.levels[0].minutes*60000;t.runningSince=null;await saveAndRender('Blind timer reset.');}
 async function saveBlindStructure(){if(state.status!=='active'||window.viewingHistory)return toast('Open an active tournament first.');
- const lines=document.getElementById('blindStructureInput').value.split(/\n/).map(s=>s.trim()).filter(Boolean),levels=[];
- for(const line of lines){const br=line.match(/^BREAK\s*,\s*(\d+)$/i),blind=line.match(/^(\d+)\s*\/\s*(\d+)\s*,\s*(\d+)$/i);if(br){const minutes=+br[1];if(minutes<1||minutes>240)return toast('Break duration must be 1–240 minutes.');levels.push({break:true,minutes})}else if(blind){const [sb,bb,minutes]=blind.slice(1).map(Number);if(sb<1||bb<sb||minutes<1||minutes>240)return toast('Check blinds and durations (1–240 minutes).');levels.push({sb,bb,minutes})}else return toast('Invalid line: '+line)}
- if(!levels.length||levels.length>100)return toast('Enter 1–100 levels.');if(!confirm('Replace the blind structure and restart the timer at Level 1?'))return;
+ const rows=[...document.querySelectorAll('#blindStructureRows .blind-edit-row')],levels=[];
+ for(const row of rows){const {sb,bb,minutes,check}=row._blindFields,duration=Number(minutes.value);
+  if(!Number.isInteger(duration)||duration<1||duration>240)return toast('Each level or break needs a time of 1–240 minutes.');
+  if(check.checked)levels.push({break:true,minutes:duration});else{const small=Number(sb.value),big=Number(bb.value);if(!Number.isSafeInteger(small)||!Number.isSafeInteger(big)||small<1||big<small)return toast('Check the small and big blind amounts.');levels.push({sb:small,bb:big,minutes:duration})}
+ }
+ if(!levels.length||levels.length>100)return toast('Enter 1–100 levels.');if(!confirm('Save this blind structure and restart the timer at the first row?'))return;
  state.blindTimer={levels,index:0,remainingMs:levels[0].minutes*60000,runningSince:null};await saveAndRender('Blind structure saved.');renderBlindTimer(true);
 }
 // Advance at most one level per elapsed timer boundary, even if no device was open.
