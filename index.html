@@ -17,6 +17,14 @@
 @media(max-width:760px){.payout-layout{grid-template-columns:1fr}.payout-card{padding:14px}.page-nav button{flex:1}}
 @media print{body{background:#fff;color:#000}.auth,.topline .sync,.page-nav,.payout-actions,#tournamentPage,.payout-card.controls,.payout-legal,#payoutStatus,.toast{display:none!important}#app{display:block!important}.wrap{max-width:none;padding:0}#payoutPage{display:block!important}.payout-layout{display:block}.payout-card{background:#fff;color:#000;border:0;padding:0}.payout-amount{color:#000}.payout-preview th,.payout-preview td{color:#000!important;border-color:#bbb}}
 .blind-editor{display:grid;gap:10px;margin:15px 0}.blind-edit-row{display:grid;grid-template-columns:minmax(80px,1fr) minmax(80px,1fr) minmax(85px,1fr) auto auto;gap:9px;align-items:end;background:#172033;border:1px solid #405069;border-radius:12px;padding:12px}.blind-edit-row label{font-size:12px;color:#cbd5e1;display:flex;flex-direction:column;gap:6px}.blind-edit-row input[type=number]{width:100%;min-width:0}.blind-edit-row .break-check{display:flex;flex-direction:row;align-items:center;gap:6px;padding-bottom:13px}.blind-edit-row .break-check input{min-width:auto;flex:none;width:19px;height:19px}.blind-edit-row.is-break .blind-value{opacity:.4}.blind-edit-row button{padding:11px}.display-timer{background:#111827;border:1px solid #22c55e;border-radius:18px;padding:22px;text-align:center;margin:14px 0 22px}.display-level{font-size:clamp(22px,4vw,38px);font-weight:850;color:#86efac}.display-blinds{font-size:clamp(30px,6vw,58px);font-weight:850;margin:5px 0}.display-countdown{font-size:clamp(64px,13vw,128px);font-weight:900;font-variant-numeric:tabular-nums;line-height:1.2}.display-timer .small{margin-top:7px}@media(max-width:580px){.blind-edit-row{grid-template-columns:1fr 1fr 1fr}.blind-edit-row .break-check{grid-column:span 2;padding:8px 0}.blind-edit-row button{grid-column:3}}
+
+/* Native in-app selector replaces the browser's numbered prompt. */
+.blind-choice-overlay{position:fixed;inset:0;background:#020617d9;z-index:75;display:flex;align-items:center;justify-content:center;padding:16px}
+.blind-choice-card{width:min(470px,100%);max-height:90vh;overflow-y:auto;background:#1f2937;border:1px solid #475569;border-radius:18px;padding:22px;box-shadow:0 20px 60px #0009}
+.blind-choice-card h2{margin:0 0 7px;font-size:23px}.blind-choice-card p{color:#cbd5e1;margin:0 0 18px;font-size:14px}
+.blind-choice-list{display:grid;gap:10px}.blind-choice-option{display:flex;align-items:center;gap:12px;background:#111827;border:1px solid #475569;border-radius:12px;padding:15px;cursor:pointer;overflow-wrap:anywhere}
+.blind-choice-option:has(input:checked){border-color:#22c55e;background:#143323}.blind-choice-option input{min-width:18px;width:18px;height:18px;flex:none;accent-color:#22c55e}
+.blind-choice-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}.blind-choice-actions button{flex:1;min-width:125px}
 </style>
 </head>
 <body>
@@ -87,10 +95,16 @@
    </div>
   </section>
   <section id="displayPage" class="hidden" aria-label="Read-only seating display">
-   <div class="payout-card"><h2>📺 Player seating display</h2><p class="small">Read-only view: no entry payments, results controls or director actions. This view currently requires signing in; do not share your director login with players.</p>
+   <div class="payout-card">
     <div class="display-timer" aria-live="off"><div id="publicLevel" class="display-level">LEVEL 1</div><div id="publicBlind" class="display-blinds">100 / 200</div><div id="publicCountdown" class="display-countdown">15:00</div><div id="publicTimerStatus" class="small">Timer paused</div><div id="publicNext" class="small">Next level</div></div><div id="publicSeats" class="tables"></div>
    </div>
   </section>
+</div>
+<div id="newTournamentBlindOverlay" class="blind-choice-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="newTournamentBlindTitle">
+ <div class="blind-choice-card"><h2 id="newTournamentBlindTitle">♠ New tournament</h2><p>Choose your blind structure</p>
+  <div id="newTournamentBlindChoices" class="blind-choice-list" role="radiogroup" aria-label="Blind structure"></div>
+  <div class="blind-choice-actions"><button class="secondary" type="button" onclick="finishNewTournamentBlindChoice(false)">Cancel</button><button type="button" onclick="finishNewTournamentBlindChoice(true)">Create tournament</button></div>
+ </div>
 </div>
 <div id="playerActionOverlay" class="player-action-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="playerActionTitle" onclick="if(event.target===this)closePlayerActions()"><div class="player-action-card"><h2 id="playerActionTitle">Player options</h2><p id="playerActionName"></p><div class="player-action-buttons"><button id="playerFinishBtn" onclick="choosePlayerAction('finish')">🏁 Finish / Eliminate</button><button class="blue" id="playerPaymentBtn" onclick="markSelectedPlayerPayment()">💷 Mark paid</button><button class="danger" id="playerRemoveBtn" onclick="choosePlayerAction('remove')">Remove player</button><button class="secondary" onclick="closePlayerActions()">Cancel</button></div><p class="small" id="playerActionHelp">Tap Mark paid after receiving the entry fee. The seat and player name will turn green.</p></div></div>
 <div id="toast" class="toast"></div>
@@ -714,16 +728,31 @@ async function deleteSelectedBlindStructure(){
  const {error}=await sb.from('poker_blind_structures').delete().eq('id',item.id);
  if(error)return toast('Delete failed: '+error.message);await fetchSavedBlindStructures();toast('Saved structure deleted.');
 }
+let newTournamentBlindResolver=null;
+function finishNewTournamentBlindChoice(accepted){
+ const overlay=document.getElementById('newTournamentBlindOverlay');
+ const selected=overlay.querySelector('input[name="newTournamentBlindChoice"]:checked');
+ const resolve=newTournamentBlindResolver;newTournamentBlindResolver=null;
+ overlay.classList.add('hidden');
+ if(!resolve)return;
+ if(!accepted||!selected)return resolve(null);
+ const current=state.blindTimer?.levels?.length?state.blindTimer:{levels:structuredClone(DEFAULT_BLINDS),structureName:'Default structure'};
+ const chosen=selected.value==='current'?{name:current.structureName||'Current structure',levels:current.levels}:savedBlindStructures.find(x=>x.id===selected.value);
+ resolve(chosen?{name:chosen.name,levels:structuredClone(chosen.levels)}:null);
+}
 async function chooseNewTournamentBlinds(){
  const available=await fetchSavedBlindStructures();if(!available)return null;
  const current=state.blindTimer?.levels?.length?state.blindTimer:{levels:structuredClone(DEFAULT_BLINDS),structureName:'Default structure'};
- const choices=['0 — Use current structure ('+(current.structureName||'Current structure')+')',...savedBlindStructures.map((x,i)=>(i+1)+' — '+x.name)];
- const selection=prompt('NEW TOURNAMENT — SELECT BLIND STRUCTURE\n\n'+choices.join('\n')+'\n\nEnter a number. Cancel keeps your existing tournament unchanged.','0');
- if(selection===null)return null;
- if(!/^(0|[1-9]\d*)$/.test(selection.trim())){toast('Invalid selection. No new tournament created.');return null}
- const index=Number(selection.trim());if(index>savedBlindStructures.length){toast('Invalid selection. No new tournament created.');return null}
- const chosen=index===0?{name:current.structureName||'Current structure',levels:current.levels}:savedBlindStructures[index-1];
- return {name:chosen.name,levels:structuredClone(chosen.levels)};
+ const list=document.getElementById('newTournamentBlindChoices');list.replaceChildren();
+ function addChoice(value,title,checked){
+  const label=document.createElement('label');label.className='blind-choice-option';
+  const radio=document.createElement('input');radio.type='radio';radio.name='newTournamentBlindChoice';radio.value=value;radio.checked=checked;
+  const text=document.createElement('span');text.textContent=title;label.append(radio,text);list.appendChild(label);
+ }
+ addChoice('current','Use current structure ('+(current.structureName||'Current structure')+')',true);
+ for(const item of savedBlindStructures)addChoice(item.id,item.name,false);
+ document.getElementById('newTournamentBlindOverlay').classList.remove('hidden');
+ return new Promise(resolve=>{newTournamentBlindResolver=resolve});
 }
 
 // Advance at most one level per elapsed timer boundary, even if no device was open.
