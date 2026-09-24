@@ -9,13 +9,21 @@
 :root{--bg:#111827;--panel:#1f2937;--panel2:#273449;--text:#f9fafb;--muted:#9ca3af;--accent:#22c55e;--danger:#ef4444;--blue:#38bdf8}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:linear-gradient(135deg,#0b1220,#172033);color:var(--text);min-height:100vh}.wrap{max-width:1100px;margin:auto;padding:20px}h1{margin:0 0 6px;font-size:clamp(25px,5vw,38px)}.sub{color:var(--muted);margin:0 0 18px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;background:var(--panel);padding:14px;border-radius:14px;margin-bottom:16px}input,button{font:inherit}input{flex:1;min-width:180px;padding:12px 13px;border-radius:10px;border:1px solid #46546a;background:#111827;color:white;outline:none}input:focus{border-color:var(--accent)}button{border:0;border-radius:10px;padding:11px 14px;cursor:pointer;font-weight:700;color:#07110a;background:var(--accent)}button.secondary{background:#475569;color:white}button.danger{background:var(--danger);color:white}button.blue{background:var(--blue);color:#06202b}button:disabled{opacity:.45;cursor:not-allowed}.status{background:#172033;border:1px solid #334155;padding:12px 14px;border-radius:12px;margin-bottom:16px;color:#dbeafe}.tables{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}.table-card{background:var(--panel);border-radius:18px;padding:15px;box-shadow:0 8px 30px #0004}.table-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}.table-title{font-size:20px;font-weight:800}.count{color:var(--muted);font-size:13px}.remove{padding:7px 10px;font-size:12px}.seats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.seat{min-height:62px;background:var(--panel2);border:1px solid #3b4a60;border-radius:11px;padding:8px;display:flex;flex-direction:column;justify-content:center}.seat.fixed{border-color:#f59e0b;background:#3b2f18}.seat-num{color:var(--muted);font-size:11px;text-transform:uppercase}.player{font-weight:750;overflow-wrap:anywhere}.empty{color:#64748b;font-size:14px}.hint{margin-top:12px;color:var(--muted);font-size:12px;line-height:1.45}.players{margin-top:18px;background:var(--panel);border-radius:14px;padding:14px}.players h2{margin:0 0 8px;font-size:18px}.player-list{display:flex;flex-wrap:wrap;gap:7px}.pill{background:#334155;padding:7px 9px;border-radius:999px;font-size:13px}.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#020617;border:1px solid #475569;padding:11px 15px;border-radius:10px;display:none;z-index:30}.auth{position:fixed;inset:0;background:rgba(2,6,23,.96);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}.auth-card{width:min(430px,100%);background:var(--panel);border:1px solid #334155;border-radius:18px;padding:22px;box-shadow:0 20px 60px #0008}.auth-card h2{margin-top:0}.auth-card input{width:100%;margin-bottom:10px}.auth-card button{width:100%;margin-top:6px}.small{font-size:12px;color:var(--muted);line-height:1.4}.topline{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.sync{font-size:12px;color:#86efac}.hidden{display:none!important}.history-row{width:100%;background:#334155;border-radius:10px;padding:10px}.history-row strong{display:block;margin-bottom:4px}.history-row .results{color:#cbd5e1;font-size:13px;white-space:pre-line}.history-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.history-actions button{padding:6px 9px;font-size:12px}.history-title{font-size:14px;font-weight:800;color:#f8fafc}.history-meta{color:#cbd5e1;font-size:12px;margin-top:3px}
 .player-action-overlay{position:fixed;inset:0;background:#020617cc;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px}.player-action-card{background:var(--panel);border:1px solid #475569;border-radius:16px;padding:22px;width:min(400px,100%);box-shadow:0 20px 60px #0009}.player-action-card h2{margin:0 0 10px}.player-action-card p{color:#cbd5e1}.player-action-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.player-action-buttons button{flex:1;min-width:120px}
-.payment-summary{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 12px}.payment-total{border:1px solid #3b4a60;background:#172033;border-radius:10px;padding:9px 13px;font-weight:700}.payment-row{background:#273449;border-radius:10px;padding:8px 10px;display:flex;align-items:center;gap:9px;justify-content:space-between;flex-wrap:wrap;min-width:200px}.payment-row button{font-size:12px;padding:7px 10px}.payment-badge{display:inline-block;border-radius:999px;font-size:11px;font-weight:800;padding:3px 7px;white-space:nowrap}.payment-badge.paid{background:#14532d;color:#bbf7d0}.payment-badge.unpaid{background:#78350f;color:#fef3c7}.payment-person{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.payment-section-title{font-size:12px;font-weight:750;color:#cbd5e1;margin:12px 0 7px}
+.seat.paid-seat{background:#14532d;border:2px solid #22c55e}.seat.paid-seat.fixed{background:#29502b;border-color:#f59e0b;box-shadow:inset 0 0 0 2px #22c55e}.paid-name{color:#bbf7d0}.paid-mark{color:#bbf7d0;font-size:11px;font-weight:800;margin-top:4px}.pill.paid-player{background:#14532d;border:1px solid #22c55e;color:#dcfce7}.tap-name{cursor:pointer}.tap-name:focus-visible,.seat:focus-visible{outline:2px solid #38bdf8;outline-offset:2px}
+
+/* Separate prize-payout page; existing tournament/seating controls remain unchanged. */
+.page-nav{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 18px}.page-nav button{background:#334155;color:#e2e8f0;border:1px solid #475569}.page-nav button.active{background:#14532d;color:#dcfce7;border-color:#22c55e}
+.payout-layout{display:grid;grid-template-columns:minmax(280px,1fr) minmax(300px,1.25fr);gap:16px}.payout-card{background:var(--panel);border:1px solid #334155;border-radius:16px;padding:18px;min-width:0}.payout-card h2{font-size:20px;margin:0 0 6px}.payout-card h3{font-size:16px;margin:16px 0 8px}.payout-field{margin:16px 0}.payout-field label,.payout-field>label{display:block;font-size:13px;font-weight:750;color:#e2e8f0;margin-bottom:7px}.payout-field input:not([type=checkbox]),.payout-field select{width:100%;min-width:0;padding:12px 13px;border-radius:10px;border:1px solid #46546a;background:#111827;color:white;font:inherit}.payout-inline{display:flex;align-items:center;gap:9px}.payout-inline input[type=checkbox]{width:17px;min-width:17px;height:17px;accent-color:#22c55e;flex:none}.payout-inline label{display:inline;margin:0;font-size:13px;color:#e2e8f0;cursor:pointer}.payout-percent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px}.payout-percent-grid label{display:block;font-size:12px;color:#cbd5e1;margin-bottom:5px}.payout-percent-grid input{width:100%;min-width:0;padding:10px;background:#111827;color:white;border:1px solid #46546a;border-radius:9px}.payout-actions{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0 8px}.payout-amount{font-size:clamp(24px,4vw,34px);font-weight:850;color:#86efac}.payout-preview{width:100%;border-collapse:collapse;margin-top:14px}.payout-preview th,.payout-preview td{text-align:left;padding:11px 8px;border-bottom:1px solid #405069}.payout-preview th{color:#cbd5e1;font-size:12px}.payout-preview td:last-child,.payout-preview th:last-child{text-align:right;font-variant-numeric:tabular-nums}.payout-preview tr:first-child td{color:#bbf7d0;font-weight:850}.payout-alert{padding:11px 13px;background:#3b2f18;border:1px solid #f59e0b;border-radius:10px;color:#fde68a;font-size:13px;line-height:1.5;margin-top:12px}.payout-ok{color:#86efac;font-size:13px}.payout-meta{font-size:13px;color:#cbd5e1;line-height:1.55}.payout-structure{border-collapse:collapse;width:100%;font-size:12px;margin-top:10px}.payout-structure th,.payout-structure td{padding:7px 5px;text-align:left;border-bottom:1px solid #405069}.payout-structure th{color:#cbd5e1}.payout-structure .chosen{color:#86efac;font-weight:800}.payout-legal{border-left:3px solid #64748b;padding:8px 12px;color:#cbd5e1;font-size:12px;line-height:1.5;margin-top:15px}
+@media(max-width:760px){.payout-layout{grid-template-columns:1fr}.payout-card{padding:14px}.page-nav button{flex:1}}
+@media print{body{background:#fff;color:#000}.auth,.topline .sync,.page-nav,.payout-actions,#tournamentPage,.payout-card.controls,.payout-legal,#payoutStatus,.toast{display:none!important}#app{display:block!important}.wrap{max-width:none;padding:0}#payoutPage{display:block!important}.payout-layout{display:block}.payout-card{background:#fff;color:#000;border:0;padding:0}.payout-amount{color:#000}.payout-preview th,.payout-preview td{color:#000!important;border-color:#bbb}}
 </style>
 </head>
 <body>
 <div id="auth" class="auth"><div class="auth-card"><h2>♠ Poker Table Seating</h2><p class="small">Sign in to keep the tournament shared between your phone and laptop.</p><input id="email" type="email" placeholder="Email address" autocomplete="email"><input id="password" type="password" placeholder="Password" autocomplete="current-password"><button id="loginBtn" onclick="login()">Sign in</button><p id="authMsg" class="small"></p></div></div>
 <div class="wrap" id="app" style="display:none">
   <div class="topline"><div><h1>♠ Poker Table Seating</h1><p class="sub">Up to 8 players per table • Paul W: Table 1 Seat 3 · Matt W: Table 2 when open · Random seating until the final 8.</p></div><div><span id="syncStatus" class="sync">Cloud connected</span><br><button class="secondary" style="margin-top:6px;padding:7px 10px;font-size:12px" onclick="logout()">Sign out</button></div></div>
+  <nav class="page-nav" aria-label="App pages"><button id="tournamentNavBtn" class="active" onclick="showPage('tournament')" aria-current="page">♠ Tournament</button><button id="payoutNavBtn" onclick="showPage('payouts')">💷 Payout calculator</button></nav>
+  <section id="tournamentPage" aria-label="Tournament management">
   <div class="toolbar">
     <label style="display:flex;align-items:center;gap:8px;color:#cbd5e1;font-size:13px">Tournament date <input id="tournamentDate" type="date" style="min-width:150px;flex:0 0 auto"></label>
     <input id="tournamentName" placeholder="Tournament name (optional)" autocomplete="off">
@@ -28,13 +36,48 @@
   </div>
   <div id="status" class="status"></div>
   <div id="movementNotice" class="status hidden" role="status"></div>
-  <div class="players" id="paymentsPanel" style="margin:0 0 16px"><h2>💷 Entry payments</h2><p class="small">Track who has paid their entry. This is a manual record — the app does not collect money.</p><div class="payment-summary" id="paymentSummary"></div><div id="paymentRows"></div></div>
   <div id="tables" class="tables"></div>
   <div class="players"><h2>Finishing positions</h2><div id="finishList" class="player-list"></div><div class="hint">Use Undo to restore an accidentally eliminated player, or Edit results to correct the order.</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="secondary" id="editResultsBtn" onclick="editResults()">✏️ Edit results</button><button class="secondary" id="restoreBackupBtn" onclick="restoreLastBackup()">↩ Restore last backup</button></div></div>
   <div class="players"><h2>Tournament history</h2><div id="historyList" class="player-list"></div></div>
   <div class="players"><h2>Players currently seated</h2><div id="playerList" class="player-list"></div></div>
+  </section>
+  <section id="payoutPage" class="hidden" aria-label="Prize payout calculator">
+    <div class="payout-card" style="margin-bottom:16px">
+      <h2>💷 Prize payout calculator</h2>
+      <p class="payout-meta" style="margin:4px 0 0">Choose how many places receive a prize, enter the total prize pot and set any rounding you want. This is a proposed split, not a payment transaction.</p>
+      <p id="payoutTournamentName" class="small" style="margin-bottom:0"></p>
+    </div>
+    <div class="payout-layout">
+      <div class="payout-card controls">
+        <h2>Set up payouts</h2>
+        <div class="payout-field">
+          <div class="payout-inline"><input id="payoutUseRoster" type="checkbox" checked onchange="onPayoutRosterToggle()"><label for="payoutUseRoster">Use registered player count automatically</label></div>
+          <p class="small" id="payoutRosterStatus" style="margin:7px 0 0"></p>
+        </div>
+        <div class="payout-field"><label for="payoutEntrants">Number of entrants</label><input id="payoutEntrants" type="number" min="1" max="10000" step="1" value="0" oninput="onPayoutEntrantsChange()"></div>
+        <div class="payout-field"><label for="payoutPot">Total prize pot (£)</label><input id="payoutPot" type="number" min="0" max="9999999.99" step="0.01" placeholder="e.g. 100.00" inputmode="decimal" oninput="onPayoutValueChange()"></div>
+        <div class="payout-field"><label for="payoutPlaces">Places paid</label><select id="payoutPlaces" onchange="onPayoutPlacesChange()"></select><p class="small" id="payoutPresetHint" style="margin:7px 0 0"></p></div>
+        <div class="payout-field"><label>Percentages (editable)</label><div id="payoutPercentageFields" class="payout-percent-grid"></div><p class="small" style="margin:8px 0 0">Percentages must add up to 100%. Changing entrant count selects the suggested structure; you can then adjust it.</p><button class="secondary" style="margin-top:9px;padding:8px 10px;font-size:12px" onclick="resetPayoutSplit()">↩ Restore suggested percentages</button></div>
+        <div class="payout-field"><label for="payoutRound">Round payouts to</label><select id="payoutRound" onchange="onPayoutRoundingChange()"><option value="1">Exact amount (penny)</option><option value="100">£1</option><option value="500">£5</option><option value="1000">£10</option><option value="2000">£20</option><option value="custom">Other amount…</option></select></div>
+        <div class="payout-field hidden" id="payoutCustomRoundWrap"><label for="payoutCustomRound">Custom rounding amount (£)</label><input id="payoutCustomRound" type="number" min="0.01" max="999999.99" step="0.01" value="2.50" inputmode="decimal" oninput="onPayoutRoundingChange()"></div>
+        <div class="payout-field"><label for="payoutRemainder">If the pot can't be divided into rounded amounts</label><select id="payoutRemainder" onchange="onPayoutValueChange()"><option value="winner">Add the odd amount to 1st place (pays out the entire pot)</option><option value="unallocated">Leave it unallocated (all prizes stay rounded)</option></select></div>
+        <div class="payout-actions"><button id="savePayoutBtn" onclick="savePayoutPlan()">💾 Save payout plan</button><button class="secondary" onclick="window.print()">🖨 Print</button></div>
+        <div id="payoutStatus" class="small" role="status"></div>
+      </div>
+      <div class="payout-card">
+        <h2>Payouts</h2>
+        <div class="payout-meta" id="payoutPreviewSummary">Enter a pot to calculate prizes.</div>
+        <div class="payout-amount" id="payoutPreviewTotal">£0.00</div>
+        <table class="payout-preview"><thead><tr><th>Finishing position</th><th>Share</th><th>Payout</th></tr></thead><tbody id="payoutPreviewRows"></tbody></table>
+        <div id="payoutPreviewFoot" class="payout-meta" style="margin-top:14px"></div>
+        <div id="payoutWarning" role="status"></div>
+        <div class="payout-legal">For poker in pubs in England and Wales, Gambling Commission guidance specifies a £5 stake limit per player per game, a £100 daily stakes limit per premises and a £100 prize limit per game; pubs cannot charge a separate participation fee. See the <a href="https://www.gamblingcommission.gov.uk/authorities/guide/page/poker-leagues-and-the-requirements-of-the-gambling-act-2005" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc">official guidance</a>. Different permissions and venue types can have different rules. This calculator does not verify legal compliance.</div>
+      </div>
+    </div>
+    <div class="payout-card" style="margin-top:16px"><h2>Suggested payout structure</h2><p class="payout-meta" style="margin:4px 0">These are editable starting percentages based on the number of entrants, not compulsory rules. The actual total pot is always entered separately.</p><table class="payout-structure"><thead><tr><th>Entrants</th><th>Paid places</th><th>Suggested split</th></tr></thead><tbody id="payoutStructureRows"></tbody></table></div>
+  </section>
 </div>
-<div id="playerActionOverlay" class="player-action-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="playerActionTitle" onclick="if(event.target===this)closePlayerActions()"><div class="player-action-card"><h2 id="playerActionTitle">Player options</h2><p id="playerActionName"></p><div class="player-action-buttons"><button id="playerFinishBtn" onclick="choosePlayerAction('finish')">🏁 Finish / Eliminate</button><button class="blue" id="playerPaymentBtn" onclick="markSelectedPlayerPayment()">💷 Mark paid</button><button class="danger" onclick="choosePlayerAction('remove')">Remove player</button><button class="secondary" onclick="closePlayerActions()">Cancel</button></div><p class="small">Finish records their tournament position. Remove takes them out without recording a finishing position.</p></div></div>
+<div id="playerActionOverlay" class="player-action-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="playerActionTitle" onclick="if(event.target===this)closePlayerActions()"><div class="player-action-card"><h2 id="playerActionTitle">Player options</h2><p id="playerActionName"></p><div class="player-action-buttons"><button id="playerFinishBtn" onclick="choosePlayerAction('finish')">🏁 Finish / Eliminate</button><button class="blue" id="playerPaymentBtn" onclick="markSelectedPlayerPayment()">💷 Mark paid</button><button class="danger" id="playerRemoveBtn" onclick="choosePlayerAction('remove')">Remove player</button><button class="secondary" onclick="closePlayerActions()">Cancel</button></div><p class="small" id="playerActionHelp">Tap Mark paid after receiving the entry fee. The seat and player name will turn green.</p></div></div>
 <div id="toast" class="toast"></div>
 <script>
 const SUPABASE_URL='https://edspbipscrzlxpkrhxlk.supabase.co';
@@ -46,10 +89,13 @@ let tournamentId=null;
 let lastCloudUpdatedAt=null;
 let pollTimer=null;
 let realtimeChannel=null;
+let currentPage='tournament';
+let payoutDraft=null;
+let payoutDraftTournamentId=null;
 
 function makeTable(num){return{number:num,seats:Array(MAX_SEATS).fill(null)}}
-function blankState(){return{tables:[makeTable(1)],players:{},finalTableStarted:false,manualTableCount:1,eliminationRecords:[],resultBackups:[],changeLog:[],payments:{},tournamentDate:new Date().toISOString().slice(0,10),tournamentName:'',finishOrder:[],status:'active'}}
-function loadLocal(){try{const x=JSON.parse(localStorage.getItem('pokerSeatingV1'));if(x&&Array.isArray(x.tables)){x.finishOrder=Array.isArray(x.finishOrder)?x.finishOrder:[];x.status=x.status||'active';x.tournamentDate=x.tournamentDate||new Date().toISOString().slice(0,10);x.tournamentName=x.tournamentName||'';x.payments=x.payments||{};return x}}catch(e){}return blankState()}
+function blankState(){return{tables:[makeTable(1)],players:{},finalTableStarted:false,manualTableCount:1,eliminationRecords:[],resultBackups:[],changeLog:[],payments:{},payoutPlan:null,tournamentDate:new Date().toISOString().slice(0,10),tournamentName:'',finishOrder:[],status:'active'}}
+function loadLocal(){try{const x=JSON.parse(localStorage.getItem('pokerSeatingV1'));if(x&&Array.isArray(x.tables)){x.finishOrder=Array.isArray(x.finishOrder)?x.finishOrder:[];x.status=x.status||'active';x.tournamentDate=x.tournamentDate||new Date().toISOString().slice(0,10);x.tournamentName=x.tournamentName||'';x.payments=x.payments||{};x.payoutPlan=x.payoutPlan||null;return x}}catch(e){}return blankState()}
 function cache(){localStorage.setItem('pokerSeatingV1',JSON.stringify(state))}
 function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.style.display='block';clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.style.display='none',2500)}
 function allSeats(){const a=[];state.tables.forEach(t=>t.seats.forEach((p,i)=>a.push({table:t.number,seat:i+1,player:p})));return a}
@@ -59,8 +105,6 @@ function roster(){return Object.keys(state.players||{})}
 function named(name){return roster().find(n=>n.toLowerCase()===name.toLowerCase())}
 function tournamentParticipants(){return [...new Set([...roster(),...(state.finishOrder||[]),...(state.finalResults||[]).map(x=>x.player)])]}
 function isPaid(name){const p=(state.payments||{})[name];return p===true||!!(p&&p.paid)}
-function paymentBadge(name){const b=document.createElement('span');b.className='payment-badge '+(isPaid(name)?'paid':'unpaid');b.textContent=isPaid(name)?'✓ PAID':'● UNPAID';return b}
-function paymentChipHtml(name){return '<span class="payment-badge '+(isPaid(name)?'paid':'unpaid')+'">'+(isPaid(name)?'✓ PAID':'● UNPAID')+'</span>'}
 function togglePayment(name){
  if(!tournamentParticipants().includes(name))return toast('Player not found in this tournament.');
  if(isPaid(name)&&!confirm('Change '+name+' back to UNPAID?'))return;
@@ -72,33 +116,6 @@ function togglePayment(name){
  else saveAndRender(name+' marked '+(next?'PAID':'UNPAID')+'.');
 }
 function markSelectedPlayerPayment(){const name=selectedPlayerForAction;closePlayerActions();if(name)togglePayment(name)}
-function renderPaymentTracking(completed){
- const panel=document.getElementById('paymentsPanel'),summary=document.getElementById('paymentSummary'),root=document.getElementById('paymentRows');
- const names=tournamentParticipants(),tracked=Object.keys(state.payments||{}).length>0;
- panel.classList.toggle('hidden',completed&&!tracked);
- summary.innerHTML='';root.innerHTML='';if(completed&&!tracked)return;
- if(!names.length){root.innerHTML='<span class="empty">Add a player to start tracking entry payments.</span>';return}
- const paidNames=names.filter(isPaid).sort((a,b)=>a.localeCompare(b));
- const unpaidNames=names.filter(n=>!isPaid(n)).sort((a,b)=>a.localeCompare(b));
- for(const [label,value] of [['Paid',paidNames.length],['Unpaid',unpaidNames.length],['Total entered',names.length]]){
-  const item=document.createElement('div');item.className='payment-total';item.textContent=label+': '+value;summary.appendChild(item);
- }
- for(const [title,people] of [['Awaiting payment',unpaidNames],['Paid',paidNames]]){
-  if(!people.length)continue;
-  const heading=document.createElement('div');heading.className='payment-section-title';heading.textContent=title;root.appendChild(heading);
-  const group=document.createElement('div');group.className='player-list';
-  for(const name of people){
-   const line=document.createElement('div');line.className='payment-row';
-   const who=document.createElement('div');who.className='payment-person';
-   const n=document.createElement('strong');n.textContent=name;who.appendChild(n);who.appendChild(paymentBadge(name));
-   if(!state.players?.[name]&&!completed){const out=document.createElement('span');out.className='small';out.textContent='(finished)';who.appendChild(out)}
-   const btn=document.createElement('button');btn.className=isPaid(name)?'secondary':'';
-   btn.textContent=isPaid(name)?'Mark unpaid':'✓ Mark paid';btn.onclick=()=>togglePayment(name);
-   line.append(who,btn);group.appendChild(line);
-  }
-  root.appendChild(group);
- }
-}
 function seatsFor(t,name){return shuffle(t.seats.map((p,i)=>!p&&!(t.number===1&&i===2&&!state.finalTableStarted&&name!=='Paul W'&&!!named('Paul W'))?i:-1).filter(i=>i>=0))}
 function placeOnTable(name,t){if(!t)return false;const free=seatsFor(t,name);if(!free.length)return false;t.seats[free[0]]=name;return true}
 function desiredTable(name){if(!state.finalTableStarted&&name.toLowerCase()==='paul w')return state.tables[0];if(!state.finalTableStarted&&name.toLowerCase()==='matt w'&&state.tables.length>1)return state.tables[1];return null}
@@ -321,7 +338,7 @@ async function restoreLastBackup(){
 }
 function ordinal(n){if(n%100>=11&&n%100<=13)return n+'th';return n+({1:'st',2:'nd',3:'rd'}[n%10]||'th')}
 let selectedPlayerForAction=null;
-function openPlayerActions(name){if(state.status==='completed'||window.viewingHistory||!state.players[name])return;selectedPlayerForAction=name;document.getElementById('playerActionName').textContent=name;document.getElementById('playerActionOverlay').classList.remove('hidden');document.getElementById('playerFinishBtn').disabled=false;document.getElementById('playerPaymentBtn').textContent=isPaid(name)?'↩ Mark unpaid':'💷 Mark paid'}
+function openPlayerActions(name){if(!tournamentParticipants().includes(name))return;selectedPlayerForAction=name;const active=!!state.players?.[name]&&state.status!=='completed'&&!window.viewingHistory;document.getElementById('playerActionName').textContent=name+(active?'': ' · finished');document.getElementById('playerActionOverlay').classList.remove('hidden');document.getElementById('playerFinishBtn').classList.toggle('hidden',!active);document.getElementById('playerRemoveBtn').classList.toggle('hidden',!active);document.getElementById('playerPaymentBtn').textContent=isPaid(name)?'↩ Mark unpaid':'✓ Mark paid';document.getElementById('playerActionHelp').textContent=isPaid(name)?'Paid entry recorded. Choose Mark unpaid if this was a mistake.':'Choose Mark paid when the entry fee has been received. The player will turn green.'}
 function closePlayerActions(){selectedPlayerForAction=null;document.getElementById('playerActionOverlay').classList.add('hidden')}
 function choosePlayerAction(action){const name=selectedPlayerForAction;closePlayerActions();if(!name||!state.players[name])return;if(action==='finish')finishPlayer(name);else if(action==='remove'&&confirm('Remove '+name+' without recording a finishing position?'))removePlayer(name)}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closePlayerActions()});
@@ -347,7 +364,7 @@ async function endTournament(){
  if(error){console.error(error);return toast('Could not finish tournament: '+error.message)}
  state=resultState;lastCloudUpdatedAt=data.updated_at;cache();await loadHistory();render();toast('Tournament saved to history.');
 }
-async function newTournament(){if(realtimeChannel){await sb.removeChannel(realtimeChannel);realtimeChannel=null}clearInterval(pollTimer);const d=new Date().toISOString().slice(0,10);state=blankState();state.tournamentDate=d;state.tournamentName='';state.players={};state.finishOrder=[];state.status='active';state.finalResults=[];tournamentId=null;lastCloudUpdatedAt=null;window.viewingHistory=false;document.getElementById('newTournamentBtn').classList.add('hidden');document.getElementById('backHistoryBtn').classList.add('hidden');await createActiveTournament();render();setupRealtime();pollTimer=setInterval(pollCloud,3000)}
+async function newTournament(){payoutDraft=null;if(realtimeChannel){await sb.removeChannel(realtimeChannel);realtimeChannel=null}clearInterval(pollTimer);const d=new Date().toISOString().slice(0,10);state=blankState();state.tournamentDate=d;state.tournamentName='';state.players={};state.finishOrder=[];state.status='active';state.finalResults=[];tournamentId=null;lastCloudUpdatedAt=null;window.viewingHistory=false;document.getElementById('newTournamentBtn').classList.add('hidden');document.getElementById('backHistoryBtn').classList.add('hidden');await createActiveTournament();render();setupRealtime();pollTimer=setInterval(pollCloud,3000)}
 async function createActiveTournament(){const {data,error}=await sb.from('poker_tournaments').insert({tournament_date:state.tournamentDate,status:'active',state}).select().single();if(error){toast('Could not create tournament: '+error.message);return false}tournamentId=data.id;lastCloudUpdatedAt=data.updated_at;cache();return true}
 async function saveCloud(){if(!tournamentId)return;const now=new Date().toISOString();const {data,error}=await sb.from('poker_tournaments').update({tournament_date:state.tournamentDate,state,updated_at:now}).eq('id',tournamentId).select().single();if(error){console.error(error);document.getElementById('syncStatus').textContent='Cloud save error';return}lastCloudUpdatedAt=data.updated_at;document.getElementById('syncStatus').textContent='Cloud saved'}
 async function saveAndRender(msg){cache();render();if(msg)toast(msg);await saveCloud()}
@@ -357,16 +374,218 @@ function escapeHtml(value){return String(value||'').replace(/[&<>'"]/g,c=>({'&':
 async function editHistoryName(row){const current=(row.state&&row.state.tournamentName)||'';const name=prompt('Tournament name:',current);if(name===null)return;const clean=name.trim();const nextState={...(row.state||{}),tournamentName:clean};const now=new Date().toISOString();const {data,error}=await sb.from('poker_tournaments').update({state:nextState,updated_at:now}).eq('id',row.id).select().single();if(error)return toast('Could not rename tournament: '+error.message);row.state=data.state;row.updated_at=data.updated_at;renderHistory();if(window.viewingHistory&&tournamentId===row.id){state=nextState;state.status='completed';render()}toast('Tournament name updated.')}
 async function deleteHistoryTournament(row){const title=(row.state&&row.state.tournamentName)||'Poker Tournament';if(!confirm('Delete '+title+' from '+row.tournament_date+'? This cannot be undone.'))return;const {error}=await sb.from('poker_tournaments').delete().eq('id',row.id);if(error)return toast('Could not delete tournament: '+error.message);window.historyRows=(window.historyRows||[]).filter(x=>x.id!==row.id);if(window.viewingHistory&&tournamentId===row.id){window.viewingHistory=false;tournamentId=null;state=blankState();state.status='completed';state.finalResults=[];document.getElementById('backHistoryBtn').classList.add('hidden');render()}renderHistory();toast('Tournament deleted.')}
 async function deleteAllHistory(){const rows=window.historyRows||[];if(!rows.length)return;const ok=confirm('Delete all '+rows.length+' completed tournaments from history? This cannot be undone.');if(!ok)return;const {error}=await sb.from('poker_tournaments').delete().eq('status','completed');if(error)return toast('Could not delete history: '+error.message);window.historyRows=[];if(window.viewingHistory){window.viewingHistory=false;tournamentId=null;state=blankState();state.status='completed';state.finalResults=[];document.getElementById('backHistoryBtn').classList.add('hidden');render()}renderHistory();toast('Tournament history deleted.')}
-async function openHistoryTournament(row){if(realtimeChannel){await sb.removeChannel(realtimeChannel);realtimeChannel=null}clearInterval(pollTimer);window.viewingHistory=true;state=row.state||blankState();state.status='completed';state.tournamentDate=row.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';tournamentId=row.id;document.getElementById('backHistoryBtn').classList.remove('hidden');document.getElementById('newTournamentBtn').classList.remove('hidden');render();window.scrollTo({top:0,behavior:'smooth'});toast('Viewing completed tournament from '+state.tournamentDate+'.')}
-async function exitHistoryView(){window.viewingHistory=false;const {data,error}=await sb.from('poker_tournaments').select('id,tournament_date,state,updated_at').eq('status','active').order('updated_at',{ascending:false}).limit(1);if(error){toast('Could not load current tournament.');return}if(data&&data.length){tournamentId=data[0].id;state=data[0].state||blankState();state.status='active';state.tournamentDate=data[0].tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=data[0].updated_at;if(normalizeTables())await saveCloud()}else{tournamentId=null;lastCloudUpdatedAt=null;state=blankState();state.status='completed';state.finalResults=[]}document.getElementById('backHistoryBtn').classList.add('hidden');document.getElementById('newTournamentBtn').classList.toggle('hidden',state.status!=='completed');render();if(tournamentId){setupRealtime();clearInterval(pollTimer);pollTimer=setInterval(pollCloud,3000)}}
+async function openHistoryTournament(row){if(realtimeChannel){await sb.removeChannel(realtimeChannel);realtimeChannel=null}clearInterval(pollTimer);window.viewingHistory=true;payoutDraft=null;state=row.state||blankState();state.status='completed';state.tournamentDate=row.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';tournamentId=row.id;document.getElementById('backHistoryBtn').classList.remove('hidden');document.getElementById('newTournamentBtn').classList.remove('hidden');render();window.scrollTo({top:0,behavior:'smooth'});toast('Viewing completed tournament from '+state.tournamentDate+'.')}
+async function exitHistoryView(){window.viewingHistory=false;payoutDraft=null;const {data,error}=await sb.from('poker_tournaments').select('id,tournament_date,state,updated_at').eq('status','active').order('updated_at',{ascending:false}).limit(1);if(error){toast('Could not load current tournament.');return}if(data&&data.length){tournamentId=data[0].id;state=data[0].state||blankState();state.status='active';state.tournamentDate=data[0].tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=data[0].updated_at;if(normalizeTables())await saveCloud()}else{tournamentId=null;lastCloudUpdatedAt=null;state=blankState();state.status='completed';state.finalResults=[]}document.getElementById('backHistoryBtn').classList.add('hidden');document.getElementById('newTournamentBtn').classList.toggle('hidden',state.status!=='completed');render();if(tournamentId){setupRealtime();clearInterval(pollTimer);pollTimer=setInterval(pollCloud,3000)}}
 
-function render(){const completed=state.status==='completed'||window.viewingHistory;const activeCount=Object.keys(state.players||{}).length;document.getElementById('tournamentDate').value=state.tournamentDate;document.getElementById('tournamentName').value=state.tournamentName||'';document.getElementById('newTournamentBtn').classList.toggle('hidden',!completed||!!window.viewingHistory&&activeCount>0);document.getElementById('backHistoryBtn').classList.toggle('hidden',!window.viewingHistory);if(completed){const hasResults=(state.finalResults||[]).length>0;document.getElementById('status').innerHTML=hasResults?'<b>🏆 Tournament ended</b> · '+state.tournamentDate+'<br><span style="color:#cbd5e1">Results are saved in Tournament History.</span>':'<b>♠ No active tournament</b><br><span style="color:#cbd5e1">Start a new tournament when you are ready.</span>';document.getElementById('tables').innerHTML=hasResults?'<div class="players" style="margin-top:0"><h2>🏆 Final result</h2><div class="player-list">'+(state.finalResults||[]).map(x=>'<span class="pill">'+ordinal(x.position)+' — '+escapeHtml(x.player)+'</span>').join('')+'</div></div>':'<div class="players" style="margin-top:0"><h2>Ready for the next game?</h2><div class="small">Your completed tournaments are safely stored in Tournament History below.</div></div>';document.getElementById('tournamentName').disabled=true;document.getElementById('tournamentDate').disabled=true;document.getElementById('nameInput').disabled=true;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=true;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=true}else{ensurePaul();document.getElementById('tournamentName').disabled=false;document.getElementById('tournamentDate').disabled=false;document.getElementById('nameInput').disabled=false;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=false;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=false;const total=allSeats().filter(x=>x.player).length,tables=state.tables.length,finalMode=!!state.finalTableStarted;document.getElementById('status').innerHTML='<b>'+total+'</b> player'+(total===1?'':'s')+' seated across <b>'+tables+'</b> table'+(tables===1?'':'s')+' · '+(total===0?'<b>'+(state.finishOrder.length?'All players finished — review results and end tournament.':'Ready for players.')+'</b>':finalMode?'<b>FINAL TABLE — players are random.</b>':'Ideal balance: '+Math.floor(total/tables)+'–'+Math.ceil(total/tables)+' players per table.');const root=document.getElementById('tables');root.innerHTML='';state.tables.forEach(t=>{const card=document.createElement('div');card.className='table-card';const occupied=t.seats.filter(Boolean).length;card.innerHTML='<div class="table-head"><div><div class="table-title">Table '+t.number+'</div><div class="count">'+occupied+'/8 seats</div></div><button class="danger remove" onclick="removeSpecificTable('+t.number+')" '+(tables===1?'disabled':'')+'>Remove</button></div>';const seats=document.createElement('div');seats.className='seats';t.seats.forEach((p,i)=>{const ss=document.createElement('div');ss.className='seat'+(t.number===1&&i===2&&!finalMode?' fixed':'');ss.innerHTML='<div class="seat-num">Seat '+(i+1)+(t.number===1&&i===2&&!finalMode?' · FIXED':'')+'</div><div class="'+(p?'player':'empty')+'">'+escapeHtml(p||'Empty')+'</div>'+(p?paymentChipHtml(p):'');if(p){ss.style.cursor='pointer';ss.title='Double-click for player options';ss.ondblclick=()=>openPlayerActions(p)};seats.appendChild(ss)});card.appendChild(seats);const hint=document.createElement('div');hint.className='hint';hint.textContent='Late registrations and new tables move only the players needed for balance; everyone else keeps their existing seat. When the field drops to 8 players, the final table is randomly reseated. Pre-opened tables stay open.';card.appendChild(hint);root.appendChild(card)})}const list=document.getElementById('playerList');list.innerHTML='';if(completed){list.innerHTML='<span class="empty">No active players — tournament has ended.</span>'}else{const names=allSeats().filter(x=>x.player).sort((a,b)=>a.player.localeCompare(b.player));if(!names.length)list.innerHTML='<span class="empty">No players yet.</span>';names.forEach(x=>{const p=document.createElement('span');p.className='pill';p.style.display='inline-flex';p.style.alignItems='center';p.style.gap='8px';const label=document.createElement('span');label.textContent=x.player+' · T'+x.table+' S'+x.seat;p.appendChild(label);p.appendChild(paymentBadge(x.player));const paymentButton=document.createElement('button');paymentButton.className=isPaid(x.player)?'secondary':'';paymentButton.textContent=isPaid(x.player)?'Mark unpaid':'Mark paid';paymentButton.style.fontSize='11px';paymentButton.style.padding='5px 8px';paymentButton.onclick=()=>togglePayment(x.player);p.appendChild(paymentButton);label.title='Double-click for player options';label.style.cursor='pointer';label.ondblclick=()=>openPlayerActions(x.player);const btn=document.createElement('button');btn.textContent='Finish';btn.style.padding='5px 8px';btn.style.fontSize='11px';btn.onclick=()=>finishPlayer(x.player);p.appendChild(btn);list.appendChild(p)})}document.getElementById('editResultsBtn').disabled=false;document.getElementById('restoreBackupBtn').disabled=!(state.resultBackups||[]).length;const fl=document.getElementById('finishList');fl.innerHTML='';if(completed){(state.finalResults||[]).forEach(x=>{const p=document.createElement('span');p.className='pill';p.textContent=ordinal(x.position)+' — '+x.player;if(Object.keys(state.payments||{}).length)p.appendChild(paymentBadge(x.player));fl.appendChild(p)})}else{if(!state.finishOrder.length)fl.innerHTML='<span class="empty">No finishing positions recorded yet.</span>';else state.finishOrder.slice().reverse().forEach((n,i)=>{const pp=document.createElement('span');pp.className='pill';pp.textContent=ordinal(i+Object.keys(state.players).length+1)+' — '+n+' ';pp.appendChild(paymentBadge(n));const undo=document.createElement('button');undo.className='secondary';undo.style.padding='4px 7px';undo.style.fontSize='11px';undo.textContent='↩ Undo';undo.onclick=()=>undoElimination(n);pp.appendChild(undo);fl.appendChild(pp)});if(Object.keys(state.players).length===1){const winner=Object.keys(state.players)[0],pp=document.createElement('span');pp.className='pill';pp.textContent='1st — '+winner;pp.appendChild(paymentBadge(winner));fl.prepend(pp)}}renderHistory();renderPaymentTracking(completed);renderSeatChanges(completed);cache()}
+function render(){const completed=state.status==='completed'||window.viewingHistory;const activeCount=Object.keys(state.players||{}).length;document.getElementById('tournamentDate').value=state.tournamentDate;document.getElementById('tournamentName').value=state.tournamentName||'';document.getElementById('newTournamentBtn').classList.toggle('hidden',!completed||!!window.viewingHistory&&activeCount>0);document.getElementById('backHistoryBtn').classList.toggle('hidden',!window.viewingHistory);if(completed){const hasResults=(state.finalResults||[]).length>0;document.getElementById('status').innerHTML=hasResults?'<b>🏆 Tournament ended</b> · '+state.tournamentDate+'<br><span style="color:#cbd5e1">Results are saved in Tournament History.</span>':'<b>♠ No active tournament</b><br><span style="color:#cbd5e1">Start a new tournament when you are ready.</span>';document.getElementById('tables').innerHTML=hasResults?'<div class="players" style="margin-top:0"><h2>🏆 Final result</h2><div class="player-list">'+(state.finalResults||[]).map(x=>'<span class="pill tap-name result-pill'+(isPaid(x.player)?' paid-player':'')+'" data-player="'+escapeHtml(x.player)+'" tabindex="0">'+ordinal(x.position)+' — '+escapeHtml(x.player)+(isPaid(x.player)?' · ✓ Paid':'')+'</span>').join('')+'</div></div>':'<div class="players" style="margin-top:0"><h2>Ready for the next game?</h2><div class="small">Your completed tournaments are safely stored in Tournament History below.</div></div>';document.querySelectorAll('#tables .result-pill').forEach(el=>{el.title='Tap to update entry payment';el.onclick=()=>openPlayerActions(el.dataset.player);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPlayerActions(el.dataset.player)}}});document.getElementById('tournamentName').disabled=true;document.getElementById('tournamentDate').disabled=true;document.getElementById('nameInput').disabled=true;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=true;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=true;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=true}else{ensurePaul();document.getElementById('tournamentName').disabled=false;document.getElementById('tournamentDate').disabled=false;document.getElementById('nameInput').disabled=false;document.querySelector('.toolbar button[onclick="addPlayer()"]').disabled=false;document.querySelector('.toolbar button[onclick="addTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="removeTable()"]').disabled=false;document.querySelector('.toolbar button[onclick="endTournament()"]').disabled=false;const total=allSeats().filter(x=>x.player).length,tables=state.tables.length,finalMode=!!state.finalTableStarted;document.getElementById('status').innerHTML='<b>'+total+'</b> player'+(total===1?'':'s')+' seated across <b>'+tables+'</b> table'+(tables===1?'':'s')+' · '+(total===0?'<b>'+(state.finishOrder.length?'All players finished — review results and end tournament.':'Ready for players.')+'</b>':finalMode?'<b>FINAL TABLE — players are random.</b>':'Ideal balance: '+Math.floor(total/tables)+'–'+Math.ceil(total/tables)+' players per table.');const entrants=tournamentParticipants();if(entrants.length)document.getElementById('status').innerHTML+='<br><span class="small">Entry payments: '+entrants.filter(isPaid).length+'/'+entrants.length+' paid · Tap a player to update</span>';const root=document.getElementById('tables');root.innerHTML='';state.tables.forEach(t=>{const card=document.createElement('div');card.className='table-card';const occupied=t.seats.filter(Boolean).length;card.innerHTML='<div class="table-head"><div><div class="table-title">Table '+t.number+'</div><div class="count">'+occupied+'/8 seats</div></div><button class="danger remove" onclick="removeSpecificTable('+t.number+')" '+(tables===1?'disabled':'')+'>Remove</button></div>';const seats=document.createElement('div');seats.className='seats';t.seats.forEach((p,i)=>{const ss=document.createElement('div');ss.className='seat'+(t.number===1&&i===2&&!finalMode?' fixed':'');ss.innerHTML='<div class="seat-num">Seat '+(i+1)+(t.number===1&&i===2&&!finalMode?' · FIXED':'')+'</div><div class="'+(p?'player'+(isPaid(p)?' paid-name':''):'empty')+'">'+escapeHtml(p||'Empty')+'</div>'+(p&&isPaid(p)?'<span class="paid-mark">✓ Entry paid</span>':'');if(p){ss.classList.toggle('paid-seat',isPaid(p));ss.classList.add('tap-name');ss.tabIndex=0;ss.title='Tap to open player options';ss.onclick=()=>openPlayerActions(p);ss.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPlayerActions(p)}}};seats.appendChild(ss)});card.appendChild(seats);const hint=document.createElement('div');hint.className='hint';hint.textContent='Late registrations and new tables move only the players needed for balance; everyone else keeps their existing seat. When the field drops to 8 players, the final table is randomly reseated. Pre-opened tables stay open.';card.appendChild(hint);root.appendChild(card)})}const list=document.getElementById('playerList');list.innerHTML='';if(completed){list.innerHTML='<span class="empty">No active players — tournament has ended.</span>'}else{const names=allSeats().filter(x=>x.player).sort((a,b)=>a.player.localeCompare(b.player));if(!names.length)list.innerHTML='<span class="empty">No players yet.</span>';names.forEach(x=>{const p=document.createElement('span');p.className='pill'+(isPaid(x.player)?' paid-player':'');p.style.display='inline-flex';p.style.alignItems='center';p.style.gap='8px';const label=document.createElement('span');label.textContent=x.player+' · T'+x.table+' S'+x.seat+(isPaid(x.player)?' · ✓ Paid':'');p.appendChild(label);label.title='Tap to update payment or choose player options';label.className='tap-name';label.tabIndex=0;label.onclick=()=>openPlayerActions(x.player);label.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPlayerActions(x.player)}};const btn=document.createElement('button');btn.textContent='Finish';btn.style.padding='5px 8px';btn.style.fontSize='11px';btn.onclick=()=>finishPlayer(x.player);p.appendChild(btn);list.appendChild(p)})}document.getElementById('editResultsBtn').disabled=false;document.getElementById('restoreBackupBtn').disabled=!(state.resultBackups||[]).length;const fl=document.getElementById('finishList');fl.innerHTML='';if(completed){(state.finalResults||[]).forEach(x=>{const p=document.createElement('span');p.className='pill tap-name'+(isPaid(x.player)?' paid-player':'');p.textContent=ordinal(x.position)+' — '+x.player+(isPaid(x.player)?' · ✓ Paid':'');p.title='Tap to update entry payment';p.tabIndex=0;p.onclick=()=>openPlayerActions(x.player);p.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPlayerActions(x.player)}};fl.appendChild(p)})}else{if(!state.finishOrder.length)fl.innerHTML='<span class="empty">No finishing positions recorded yet.</span>';else state.finishOrder.slice().reverse().forEach((n,i)=>{const pp=document.createElement('span');pp.className='pill tap-name'+(isPaid(n)?' paid-player':'');pp.textContent=ordinal(i+Object.keys(state.players).length+1)+' — '+n+(isPaid(n)?' · ✓ Paid':'')+' ';pp.title='Tap the name to update payment';pp.tabIndex=0;pp.onclick=()=>openPlayerActions(n);pp.onkeydown=e=>{if(e.target===pp&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openPlayerActions(n)}};const undo=document.createElement('button');undo.className='secondary';undo.style.padding='4px 7px';undo.style.fontSize='11px';undo.textContent='↩ Undo';undo.onclick=e=>{e.stopPropagation();undoElimination(n)};pp.appendChild(undo);fl.appendChild(pp)});if(Object.keys(state.players).length===1){const winner=Object.keys(state.players)[0],pp=document.createElement('span');pp.className='pill tap-name'+(isPaid(winner)?' paid-player':'');pp.textContent='1st — '+winner+(isPaid(winner)?' · ✓ Paid':'');pp.title='Tap to update entry payment';pp.tabIndex=0;pp.onclick=()=>openPlayerActions(winner);pp.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPlayerActions(winner)}};fl.prepend(pp)}}renderHistory();if(completed){const entrants=tournamentParticipants();if(entrants.length)document.getElementById('status').innerHTML+='<br><span class="small">Entry payments: '+entrants.filter(isPaid).length+'/'+entrants.length+' paid · Tap a result to update</span>'}renderSeatChanges(completed);cache();if(currentPage==='payouts')refreshPayoutCalculator(false)}
+
+
+/* Payout calculator: pounds are converted to integer pence to prevent currency rounding errors. */
+const PAYOUT_TIERS=[
+ {min:1,max:8,shares:[100]},
+ {min:9,max:16,shares:[65,35]},
+ {min:17,max:24,shares:[50,30,20]},
+ {min:25,max:32,shares:[40,30,20,10]},
+ {min:33,max:40,shares:[35,25,18,12,10]},
+ {min:41,max:10000,shares:[30,22,17,13,10,8]}
+];
+function payoutSuggestedShares(entrants){
+ const tier=PAYOUT_TIERS.find(t=>entrants>=t.min&&entrants<=t.max)||PAYOUT_TIERS.at(-1);
+ return tier.shares.slice();
+}
+function moneyPence(value){
+ if(value===null||String(value).trim()==='')return null;
+ const n=Number(value);
+ return Number.isFinite(n)&&n>=0&&n<=9999999.99?Math.round(n*100):null;
+}
+function payoutCurrency(pence){return new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(pence/100)}
+// Deterministic largest-remainder allocation; strict mode leaves only the
+// sub-increment remainder outside the prizes. Winner mode pays that amount to 1st.
+function computePayouts(potPence,shares,roundPence=1,remainderMode='winner'){
+ if(!Number.isSafeInteger(potPence)||potPence<0||!Array.isArray(shares)||!shares.length||!Number.isSafeInteger(roundPence)||roundPence<1||!['winner','unallocated'].includes(remainderMode))throw Error('Invalid payout inputs');
+ if(shares.some(v=>!Number.isFinite(v)||v<=0)||Math.abs(shares.reduce((a,b)=>a+b,0)-100)>0.001)throw Error('Shares must add up to 100%');
+ const units=Math.floor(potPence/roundPence),oddPence=potPence-units*roundPence;
+ const exactUnits=shares.map(share=>units*share/100),allocated=exactUnits.map(Math.floor);
+ let remaining=units-allocated.reduce((a,b)=>a+b,0);
+ const priorities=exactUnits.map((v,i)=>({i,fraction:v-Math.floor(v)})).sort((a,b)=>b.fraction-a.fraction||a.i-b.i);
+ for(let k=0;k<remaining;k++)allocated[priorities[k%priorities.length].i]++;
+ const amounts=allocated.map(x=>x*roundPence);
+ const unallocated=remainderMode==='winner'?0:oddPence;
+ if(remainderMode==='winner')amounts[0]+=oddPence;
+ return {amounts,oddPence,unallocated,distributed:amounts.reduce((a,b)=>a+b,0)};
+}
+function showPage(page){
+ if(!['tournament','payouts'].includes(page))return;
+ currentPage=page;
+ document.getElementById('tournamentPage').classList.toggle('hidden',page!=='tournament');
+ document.getElementById('payoutPage').classList.toggle('hidden',page!=='payouts');
+ for(const [id,selected] of [['tournamentNavBtn',page==='tournament'],['payoutNavBtn',page==='payouts']]){
+  const button=document.getElementById(id);button.classList.toggle('active',selected);
+  if(selected)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
+ }
+ if(page==='payouts')refreshPayoutCalculator(true);
+}
+function freshPayoutDraft(){
+ const saved=state.payoutPlan,rosterSize=tournamentParticipants().length;
+ if(saved&&Number.isInteger(saved.entrantCount)&&saved.entrantCount>0){
+  const auto=!!saved.useRoster;
+  const n=auto?rosterSize:saved.entrantCount;
+  const suggested=payoutSuggestedShares(n);
+  const shares=Array.isArray(saved.percentages)&&saved.percentages.length>0&&saved.percentages.length<=n&&saved.percentages.every(x=>Number.isFinite(x)&&x>0)&&Math.abs(saved.percentages.reduce((a,b)=>a+b,0)-100)<0.001&&n===saved.entrantCount?saved.percentages.slice():suggested;
+  return {entrantCount:n,useRoster:auto,potPence:Number.isSafeInteger(saved.potPence)?saved.potPence:null,percentages:shares,roundPence:Number.isSafeInteger(saved.roundPence)&&saved.roundPence>0?saved.roundPence:1,remainderMode:saved.remainderMode==='unallocated'?'unallocated':'winner',dirty:n!==saved.entrantCount};
+ }
+ const n=rosterSize;
+ return {entrantCount:n,useRoster:true,potPence:null,percentages:payoutSuggestedShares(Math.max(1,n)),roundPence:1,remainderMode:'winner',dirty:false};
+}
+function setPayoutDraftDirty(){payoutDraft.dirty=true;document.getElementById('payoutStatus').textContent='Unsaved changes — click Save payout plan to keep this split with the tournament.'}
+function setPayoutSelect(id,value){document.getElementById(id).value=String(value)}
+function populatePayoutInputs(){
+ const d=payoutDraft,rosterSize=tournamentParticipants().length;
+ document.getElementById('payoutUseRoster').checked=d.useRoster;
+ document.getElementById('payoutEntrants').disabled=d.useRoster;
+ setPayoutSelect('payoutEntrants',d.entrantCount||'');
+ setPayoutSelect('payoutPot',d.potPence===null?'':(d.potPence/100).toFixed(2));
+ setPayoutSelect('payoutRemainder',d.remainderMode);
+ document.getElementById('payoutRosterStatus').textContent=rosterSize+' recorded entrant'+(rosterSize===1?'':'s')+' · '+tournamentParticipants().filter(isPaid).length+' marked paid';
+ const roundOptions=['1','100','500','1000','2000'];
+ setPayoutSelect('payoutRound',roundOptions.includes(String(d.roundPence))?d.roundPence:'custom');
+ setPayoutSelect('payoutCustomRound',(d.roundPence/100).toFixed(2));
+ document.getElementById('payoutCustomRoundWrap').classList.toggle('hidden',roundOptions.includes(String(d.roundPence)));
+ updatePayoutPlaces();
+ document.getElementById('payoutTournamentName').textContent=(state.tournamentName||'Poker Tournament')+' · '+(state.tournamentDate||'')+(state.status==='completed'?' · Completed':' · Active');
+ document.getElementById('payoutStatus').textContent=d.dirty?'Unsaved changes — review and save.':(state.payoutPlan?.savedAt?'Saved plan · '+new Date(state.payoutPlan.savedAt).toLocaleString():'Preview only — save to keep the plan with this tournament.');
+}
+function updatePayoutPlaces(){
+ const d=payoutDraft,select=document.getElementById('payoutPlaces'),max=Math.min(12,Math.max(1,d.entrantCount||1));
+ select.innerHTML='';
+ for(let i=1;i<=max;i++){const o=document.createElement('option');o.value=String(i);o.textContent=i+' place'+(i===1?'':'s');select.appendChild(o)}
+ if(d.percentages.length>max)d.percentages=payoutSuggestedShares(max);
+ if(d.percentages.length>max)d.percentages=[100];
+ select.value=String(d.percentages.length);
+ document.getElementById('payoutPresetHint').textContent=(d.entrantCount||0)+' entrant'+(d.entrantCount===1?'':'s')+': default pays '+payoutSuggestedShares(d.entrantCount||1).length+' place'+(payoutSuggestedShares(d.entrantCount||1).length===1?'':'s')+'.';
+ renderPercentageInputs();renderPayoutTierTable();
+}
+function renderPayoutTierTable(){
+ const root=document.getElementById('payoutStructureRows');root.innerHTML='';
+ for(const tier of PAYOUT_TIERS){
+  const tr=document.createElement('tr'),chosen=payoutDraft.entrantCount>=tier.min&&payoutDraft.entrantCount<=tier.max;
+  if(chosen)tr.className='chosen';
+  for(const txt of [tier.max===10000?'41+':tier.min+'–'+tier.max,String(tier.shares.length),tier.shares.map(x=>x+'%').join(' / ')]){const td=document.createElement('td');td.textContent=txt;tr.appendChild(td)}root.appendChild(tr);
+ }
+}
+function payoutSplitForPlaces(count){
+ const template={1:[100],2:[65,35],3:[50,30,20],4:[40,30,20,10],5:[35,25,18,12,10],6:[30,22,17,13,10,8]};
+ if(template[count])return template[count].slice();
+ // Custom 7–12 paid places: scale a descending distribution to sum to 100.
+ const raw=Array.from({length:count},(_,i)=>count-i);
+ const sum=raw.reduce((a,b)=>a+b,0);
+ const first=count-1,shares=raw.map((n,i)=>i===first?0:Math.round(n*10000/sum)/100);
+ shares[first]=Math.round((100-shares.slice(0,-1).reduce((a,b)=>a+b,0))*100)/100;
+ return shares;
+}
+function renderPercentageInputs(){
+ const root=document.getElementById('payoutPercentageFields');root.innerHTML='';
+ payoutDraft.percentages.forEach((share,i)=>{
+  const wrap=document.createElement('div'),label=document.createElement('label'),input=document.createElement('input');
+  label.textContent=ordinal(i+1)+' (%)';label.htmlFor='payoutPercentage'+i;
+  input.id='payoutPercentage'+i;input.type='number';input.min='0.01';input.max='100';input.step='0.01';input.value=String(share);input.inputMode='decimal';
+  input.addEventListener('input',()=>{payoutDraft.percentages[i]=input.value.trim()===''?NaN:Number(input.value);setPayoutDraftDirty();previewPayouts()});
+  wrap.append(label,input);root.appendChild(wrap);
+ });
+}
+function refreshPayoutCalculator(forceInputs=false){
+ const key=tournamentId||'no-tournament';
+ if(!payoutDraft||payoutDraftTournamentId!==key){payoutDraft=freshPayoutDraft();payoutDraftTournamentId=key;forceInputs=true;}
+ const n=tournamentParticipants().length;
+ // Only the automatic count follows registration; manual overrides stay untouched.
+ if(payoutDraft.useRoster&&n!==payoutDraft.entrantCount){payoutDraft.entrantCount=n;payoutDraft.percentages=payoutSuggestedShares(n);payoutDraft.dirty=true;forceInputs=true;}
+ if(forceInputs)populatePayoutInputs();
+ previewPayouts();
+}
+function onPayoutRosterToggle(){
+ payoutDraft.useRoster=document.getElementById('payoutUseRoster').checked;
+ const n=tournamentParticipants().length;
+ if(payoutDraft.useRoster&&n!==payoutDraft.entrantCount){payoutDraft.entrantCount=n;payoutDraft.percentages=payoutSuggestedShares(n)}
+ setPayoutDraftDirty();populatePayoutInputs();previewPayouts();
+}
+function onPayoutEntrantsChange(){
+ if(payoutDraft.useRoster)return;
+ const n=Number(document.getElementById('payoutEntrants').value);
+ if(!Number.isInteger(n)||n<1||n>10000){payoutDraft.entrantCount=0;previewPayouts();return}
+ if(n!==payoutDraft.entrantCount){payoutDraft.entrantCount=n;payoutDraft.percentages=payoutSuggestedShares(n);setPayoutDraftDirty();updatePayoutPlaces()}
+ previewPayouts();
+}
+function onPayoutPlacesChange(){
+ const count=Number(document.getElementById('payoutPlaces').value);
+ if(!Number.isInteger(count)||count<1||count>payoutDraft.entrantCount)return;
+ payoutDraft.percentages=payoutSplitForPlaces(count);setPayoutDraftDirty();renderPercentageInputs();previewPayouts();
+}
+function resetPayoutSplit(){payoutDraft.percentages=payoutSuggestedShares(payoutDraft.entrantCount||1);setPayoutDraftDirty();updatePayoutPlaces();previewPayouts()}
+function onPayoutValueChange(){
+ payoutDraft.potPence=moneyPence(document.getElementById('payoutPot').value);
+ payoutDraft.remainderMode=document.getElementById('payoutRemainder').value;
+ setPayoutDraftDirty();previewPayouts();
+}
+function onPayoutRoundingChange(){
+ const value=document.getElementById('payoutRound').value;
+ document.getElementById('payoutCustomRoundWrap').classList.toggle('hidden',value!=='custom');
+ const p=value==='custom'?moneyPence(document.getElementById('payoutCustomRound').value):Number(value);
+ payoutDraft.roundPence=p||0;setPayoutDraftDirty();previewPayouts();
+}
+function previewPayouts(){
+ const d=payoutDraft;if(!d)return;
+ const validN=Number.isInteger(d.entrantCount)&&d.entrantCount>=1&&d.entrantCount<=10000;
+ const sum=d.percentages.reduce((a,b)=>a+b,0);
+ const validShares=d.percentages.length<=Math.max(1,d.entrantCount)&&d.percentages.every(x=>Number.isFinite(x)&&x>0)&&Math.abs(sum-100)<0.001;
+ const validPot=Number.isSafeInteger(d.potPence)&&d.potPence>0;
+ const validRound=Number.isSafeInteger(d.roundPence)&&d.roundPence>0;
+ const alert=document.getElementById('payoutWarning'),body=document.getElementById('payoutPreviewRows'),foot=document.getElementById('payoutPreviewFoot');
+ const save=document.getElementById('savePayoutBtn');body.innerHTML='';foot.innerHTML='';alert.innerHTML='';
+ document.getElementById('payoutPreviewSummary').textContent=validN?d.entrantCount+' entrant'+(d.entrantCount===1?'':'s')+' · '+d.percentages.length+' paid place'+(d.percentages.length===1?'':'s'):'Set a valid entrant count';
+ document.getElementById('payoutPreviewTotal').textContent=validPot?payoutCurrency(d.potPence):'£0.00';
+ const errors=[];
+ if(!validN)errors.push('Enter a valid number of entrants (1–10,000).');
+ if(!validPot)errors.push('Enter a total prize pot greater than £0.');
+ if(!validRound)errors.push('Choose a positive rounding amount.');
+ if(!validShares)errors.push('Payout percentages must be positive and total exactly 100% (currently '+(Number.isFinite(sum)?sum.toFixed(2):'invalid')+'%).');
+ if(errors.length){alert.className='payout-alert';alert.textContent=errors.join(' ');save.disabled=true;return}
+ let result;try{result=computePayouts(d.potPence,d.percentages,d.roundPence,d.remainderMode)}catch(e){alert.className='payout-alert';alert.textContent=e.message;save.disabled=true;return}
+ result.amounts.forEach((amount,i)=>{
+  const knownResult=(state.finalResults||[]).find(r=>r.position===i+1);
+  const winner=roster().length===1&&i===0?roster()[0]:null;
+  const positionLabel=ordinal(i+1)+(knownResult?' — '+knownResult.player:winner?' — '+winner:'');
+  const row=document.createElement('tr');for(const value of [positionLabel,d.percentages[i].toFixed(2).replace(/\.?0+$/,'')+'%',payoutCurrency(amount)]){const td=document.createElement('td');td.textContent=value;row.appendChild(td)}body.appendChild(row);
+ });
+ const info=['Distributed: '+payoutCurrency(result.distributed)];
+ if(result.unallocated)info.push('Unallocated remainder: '+payoutCurrency(result.unallocated));
+ if(result.oddPence&&d.remainderMode==='winner')info.push(payoutCurrency(result.oddPence)+' odd amount added to 1st place');
+ if(d.roundPence>1)info.push('Rounding: '+payoutCurrency(d.roundPence));
+ foot.textContent=info.join(' · ');
+ const warnings=[];
+ if(result.amounts.some(x=>x===0))warnings.push('One or more paid places would receive £0. Reduce rounding or the number of paid places.');
+ if(result.unallocated)warnings.push(payoutCurrency(result.unallocated)+' stays outside the payout amounts so every prize remains rounded.');
+ if(warnings.length){alert.className='payout-alert';alert.textContent=warnings.join(' ')}
+ else {alert.className='payout-ok';alert.textContent=result.distributed===d.potPence?'✓ The full pot is accounted for.':'✓ Rounded payout amounts calculated.'}
+ save.disabled=result.amounts.some(x=>x===0);
+}
+async function savePayoutPlan(){
+ const d=payoutDraft;if(!d)return;
+ const button=document.getElementById('savePayoutBtn');previewPayouts();if(button.disabled)return;
+ if(!tournamentId)return toast('Start or open a saved tournament before saving payouts.');
+ const result=computePayouts(d.potPence,d.percentages,d.roundPence,d.remainderMode);
+ const plan={entrantCount:d.entrantCount,useRoster:d.useRoster,potPence:d.potPence,percentages:d.percentages.slice(),roundPence:d.roundPence,remainderMode:d.remainderMode,amounts:result.amounts,unallocated:result.unallocated,savedAt:new Date().toISOString()};
+ state.payoutPlan=plan;logChange('payout plan',d.entrantCount+' entrants; '+payoutCurrency(d.potPence)+' pot; '+d.percentages.length+' paid places');
+ d.dirty=false;document.getElementById('payoutStatus').textContent='Saving payout plan…';
+ if(state.status==='completed'||window.viewingHistory)await saveCompletedCorrection('Payout plan saved to completed tournament.');
+ else await saveAndRender('Payout plan saved — check cloud status above.');
+ document.getElementById('payoutStatus').textContent='Plan saved · '+new Date(plan.savedAt).toLocaleString()+' · Check cloud status above';
+}
 
 document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')addPlayer()});document.getElementById('tournamentDate').addEventListener('change',e=>{state.tournamentDate=e.target.value;saveAndRender()});document.getElementById('tournamentName').addEventListener('change',e=>{state.tournamentName=e.target.value.trim();saveAndRender()});
 async function login(){const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;const msg=document.getElementById('authMsg');if(!email||!password){msg.textContent='Enter your email and password.';return}document.getElementById('loginBtn').disabled=true;msg.textContent='Signing in…';const {error}=await sb.auth.signInWithPassword({email,password});document.getElementById('loginBtn').disabled=false;if(error){msg.textContent=error.message;return}msg.textContent=''}
 async function logout(){await sb.auth.signOut()}
 async function start(){const {data:{session}}=await sb.auth.getSession();if(session)await signedIn(session);sb.auth.onAuthStateChange(async(event,session)=>{if(session)await signedIn(session);else{document.getElementById('app').style.display='none';document.getElementById('auth').classList.remove('hidden')}})}
-async function signedIn(session){window.viewingHistory=false;document.getElementById('auth').classList.add('hidden');document.getElementById('app').style.display='block';document.getElementById('syncStatus').textContent='Loading cloud…';const {data,error}=await sb.from('poker_tournaments').select('id,tournament_date,state,updated_at').eq('status','active').order('updated_at',{ascending:false}).limit(1);if(error){document.getElementById('syncStatus').textContent='Cloud error';toast(error.message);return}if(data&&data.length){tournamentId=data[0].id;state=data[0].state||blankState();state.tournamentDate=data[0].tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';state.status='active';lastCloudUpdatedAt=data[0].updated_at;cache();if(normalizeTables())await saveCloud()}else{tournamentId=null;lastCloudUpdatedAt=null;state=blankState();state.status='completed';state.finalResults=[];cache()}await loadHistory();render();document.getElementById('syncStatus').textContent='Cloud connected';setupRealtime();clearInterval(pollTimer);pollTimer=setInterval(pollCloud,3000)}
+async function signedIn(session){window.viewingHistory=false;payoutDraft=null;document.getElementById('auth').classList.add('hidden');document.getElementById('app').style.display='block';document.getElementById('syncStatus').textContent='Loading cloud…';const {data,error}=await sb.from('poker_tournaments').select('id,tournament_date,state,updated_at').eq('status','active').order('updated_at',{ascending:false}).limit(1);if(error){document.getElementById('syncStatus').textContent='Cloud error';toast(error.message);return}if(data&&data.length){tournamentId=data[0].id;state=data[0].state||blankState();state.tournamentDate=data[0].tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';state.status='active';lastCloudUpdatedAt=data[0].updated_at;cache();if(normalizeTables())await saveCloud()}else{tournamentId=null;lastCloudUpdatedAt=null;state=blankState();state.status='completed';state.finalResults=[];cache()}await loadHistory();render();document.getElementById('syncStatus').textContent='Cloud connected';setupRealtime();clearInterval(pollTimer);pollTimer=setInterval(pollCloud,3000)}
 function setupRealtime(){if(!tournamentId)return;if(realtimeChannel)sb.removeChannel(realtimeChannel);realtimeChannel=sb.channel('poker-'+tournamentId).on('postgres_changes',{event:'UPDATE',schema:'public',table:'poker_tournaments',filter:'id=eq.'+tournamentId},payload=>{const row=payload.new;if(row.updated_at===lastCloudUpdatedAt)return;state=row.state||state;normalizeTables();state.tournamentDate=row.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=row.updated_at;render()}).subscribe()}
 async function pollCloud(){if(!tournamentId)return;const {data,error}=await sb.from('poker_tournaments').select('state,tournament_date,updated_at,status').eq('id',tournamentId).single();if(error||!data||data.status!=='active')return;if(lastCloudUpdatedAt&&new Date(data.updated_at)<=new Date(lastCloudUpdatedAt))return;state=data.state||state;normalizeTables();state.tournamentDate=data.tournament_date||state.tournamentDate;state.tournamentName=state.tournamentName||'';lastCloudUpdatedAt=data.updated_at;render();document.getElementById('syncStatus').textContent='Updated from cloud'}
 start();
