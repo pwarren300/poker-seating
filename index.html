@@ -71,6 +71,46 @@ button.danger,.danger,.remove{background:#dc3545;color:white;border:1px solid #f
 /* Preserve red destructive actions even inside other component styles. */
 button.danger:hover{background:#b91c1c}
 
+
+/* Black & Gold V1 polish — visual changes only. Keep green for payment/connection
+   and red for remove/delete/reset/abandon actions. */
+:root{--bg:#101112;--panel:#22201c;--panel2:#292722;--text:#f5f0e6;--muted:#bdb4a4;--accent:#d5b36b;--danger:#dc3545;--blue:#d5b36b}
+/* Completed tournament and history */
+.results-card{background:linear-gradient(145deg,#25221c,#1b1b1b);border:1px solid #80683e;color:#f5f0e6}
+.results-header h2{color:#f1d18a}.results-meta{color:#c9c0af}
+.results-table th{color:#e3c98d;border-bottom:1px solid #80683e}
+.results-table td{border-bottom:1px solid #554a37}
+.results-table tr:first-child td{color:#f5d68b}
+.results-table .result-name{text-decoration-color:#a78b53}
+.results-table .unpaid-badge{background:#40382a;color:#f5f0e6;border:1px solid #80683e}
+.history-title{color:#f5d68b}.history-meta,.history-row .results{color:#c9c0af}
+/* Blind structure editor: replace remaining navy panels */
+.blind-edit-row{background:#25221e;border:1px solid #80683e;color:#f5f0e6}
+.blind-edit-row label{color:#e0d5c1}
+.blind-edit-row input[type=checkbox],.blind-choice-option input{accent-color:#d5b36b}
+.blind-choice-overlay{background:rgba(8,8,8,.88)}
+.blind-choice-card{background:#22201c;border:1px solid #80683e;color:#f5f0e6}
+.blind-choice-card p{color:#c9c0af}
+.blind-choice-option{background:#181818;border:1px solid #79623d;color:#f5f0e6}
+.blind-choice-option:has(input:checked){border-color:#e5c37c;background:#3a3020}
+/* Timer and live display — gold is decorative; green still means connected/paid */
+.display-timer{background:#181818;border:1px solid #b89451;color:#f5f0e6}
+.display-level{color:#f1d18a}
+.display-blinds,.display-countdown{color:#f5f0e6}
+body.tv-mode{background:#101112}
+/* Payout tables and input controls */
+.payout-preview th,.payout-preview td,.payout-structure th,.payout-structure td{border-bottom-color:#5c4d35}
+.payout-preview th,.payout-structure th{color:#ddcba9}
+.payout-percent-grid input,.payout-field input:not([type=checkbox]),.payout-field select{background:#141414;border-color:#80683e;color:#f5f0e6}
+.payout-legal{border-left-color:#b89451;color:#c9c0af}
+.payout-meta{color:#d1c6b3}
+/* All neutral surfaces, including any generated inline neutral blue backgrounds */
+.player-action-card{border-color:#80683e}
+.pill:not(.paid-player){background:#302d28;border:1px solid #655333;color:#f5f0e6}
+.toast{color:#f5f0e6}
+/* Print should remain plain and readable, not dark */
+@media print{body{background:#fff!important;color:#000!important}.payout-card,.results-card{background:#fff!important;color:#000!important;border-color:#bbb!important}.results-table th,.results-table td{color:#000!important;border-color:#bbb!important}}
+
 </style>
 </head>
 <body>
