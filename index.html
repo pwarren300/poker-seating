@@ -36,6 +36,41 @@ body.tv-mode .display-countdown{font-size:clamp(80px,13vw,180px)}
 .results-header h2{margin:0 0 5px}.results-meta{color:#cbd5e1;font-size:13px;line-height:1.6}
 .results-table{width:100%;border-collapse:collapse;text-align:left}.results-table th{color:#cbd5e1;font-size:12px;letter-spacing:.02em;padding:12px 10px;border-bottom:1px solid #475569}.results-table td{padding:13px 10px;border-bottom:1px solid #334155}.results-table tr:first-child td{color:#fde68a;font-weight:800}.results-table tr:last-child td{border-bottom:0}.results-table .money{text-align:right;font-variant-numeric:tabular-nums}.results-table .paid-badge{display:inline-block;border-radius:99px;padding:4px 9px;background:#14532d;color:#bbf7d0;font-size:12px}.results-table .unpaid-badge{display:inline-block;border-radius:99px;padding:4px 9px;background:#334155;color:#e2e8f0;font-size:12px}.results-table .result-name{background:none;color:inherit;border:0;padding:0;font-weight:inherit;text-align:left;text-decoration:underline;text-decoration-color:#64748b;text-underline-offset:4px}.results-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
 @media(max-width:480px){.results-card{padding:12px}.results-table th,.results-table td{padding:11px 5px;font-size:13px}}
+
+/* PREMIUM BLACK & GOLD THEME — visual-only override; all existing app logic unchanged */
+:root{--bg:#101215;--panel:#1c1c1b;--panel2:#292722;--text:#f5f0e6;--muted:#bcb5a8;--accent:#d5b36b;--danger:#ef4444;--blue:#d5b36b;color-scheme:dark}
+body{background:linear-gradient(145deg,#090a0b 0%,#151412 55%,#0b0c0e 100%);color:var(--text)}
+h1,.table-title,.players h2,.payout-card h2,.payout-card h3{color:#f1d18a}
+.sub,.count,.hint,.small{color:var(--muted)}
+.toolbar,.players,.payout-card,.table-card,.auth-card,.player-action-card{background:linear-gradient(145deg,#22201c,#191a1b);border:1px solid #655333}
+.status{background:#201e19;border:1px solid #765e32;color:#f5f0e6}
+input,select,textarea,.payout-field input:not([type=checkbox]),.payout-field select{background:#111214!important;border-color:#6b5837!important;color:#f5f0e6!important}
+input:focus,select:focus,textarea:focus{outline:2px solid #d5b36b;outline-offset:1px;border-color:#e5c37c!important}
+button{background:linear-gradient(135deg,#ffe0a0,#c99a45);color:#211708;border:1px solid #e5c37c}
+button.secondary{background:#302d28;color:#f4e8d2;border:1px solid #9b7d47}
+button.blue{background:#3b3325;color:#f5d894;border:1px solid #c9a65f}
+button.danger,.danger,.remove{background:#dc3545;color:white;border:1px solid #fb7185}
+.page-nav button{background:#292824;color:#e9e0ce;border:1px solid #79623d}
+.page-nav button.active{background:linear-gradient(135deg,#ffe0a0,#c99a45);color:#201608;border-color:#f5d68b}
+.seat{background:#292722;border-color:#80683e}
+.seat.fixed{background:#3b2e19;border-color:#e5b85d;box-shadow:inset 0 0 0 1px #a78037}
+.seat-num{color:#e2c17e}.empty{color:#b5ada0}
+/* Green stays exclusively meaningful for paid/connected states. */
+.seat.paid-seat{background:#14532d;border:2px solid #22c55e}
+.seat.paid-seat.fixed{background:#29502b;border-color:#e5b85d;box-shadow:inset 0 0 0 2px #22c55e}
+.paid-name,.paid-mark{color:#bbf7d0}.pill.paid-player{background:#14532d;border:1px solid #22c55e;color:#dcfce7}
+.sync{color:#86efac}
+.pill,.history-row{background:#302d28;color:#f5f0e6;border:1px solid #655333}
+.toast{background:#171512;border:1px solid #b89451}
+.auth{background:rgba(8,8,8,.97)}
+.player-action-overlay{background:#080807d9}
+.payout-inline input[type=checkbox]{accent-color:#d5b36b}
+.payout-field label,.payout-field>label,.payout-inline label{color:#f5f0e6}
+.results-table .paid-badge{background:#14532d;color:#bbf7d0}
+.results-table .unpaid-badge{background:#302d28;color:#e9dfca}
+/* Preserve red destructive actions even inside other component styles. */
+button.danger:hover{background:#b91c1c}
+
 </style>
 </head>
 <body>
